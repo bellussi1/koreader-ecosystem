@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title description">
+  <title id="title">KOReader Ecosystem</title>
+  <desc id="description">A local-first reading companion for Calibre, KOReader, and Hardcover.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111c2c"/>
+      <stop offset="1" stop-color="#1f2c40"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#ff8a43"/>
+      <stop offset="1" stop-color="#f6ba78"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" rx="24" fill="url(#background)"/>
+  <path d="M0 302c180-58 353-27 543-58s405-77 657-26v142H0Z" fill="#243449" opacity=".55"/>
+  <circle cx="1049" cy="64" r="155" fill="#f97316" opacity=".08"/>
+  <g transform="translate(72 55)">
+    <rect width="52" height="52" rx="14" fill="#0f172a" stroke="#f97316" stroke-opacity=".6"/>
+    <path d="M11 12c6-1 11 .5 15 3.5V40c-4-3-9-4.5-15-3.5Zm15 3.5c4-3 9-4.5 15-3.5v24.5c-6-1-11 .5-15 3.5Z" fill="#f8fafc"/>
+    <path d="M26 16v23" stroke="#f97316" stroke-width="2"/>
+  </g>
+  <g font-family="Inter, Segoe UI, Arial, sans-serif">
+    <text x="72" y="147" fill="#f6ba78" font-size="16" font-weight="700" letter-spacing="3">YOUR READING, CONNECTED</text>
+    <text x="70" y="203" fill="#f8fafc" font-size="50" font-weight="700" letter-spacing="-.8">KOReader Ecosystem</text>
+    <text x="72" y="242" fill="#c2cde0" font-size="20">Your library, reader, and reading progress in one place.</text>
+    <text x="72" y="289" fill="#f8fafc" font-size="14" font-weight="700" letter-spacing="1.5">CALIBRE</text>
+    <circle cx="157" cy="284" r="3" fill="#f97316"/>
+    <text x="174" y="289" fill="#f8fafc" font-size="14" font-weight="700" letter-spacing="1.5">KOREADER</text>
+    <circle cx="273" cy="284" r="3" fill="#f97316"/>
+    <text x="290" y="289" fill="#f8fafc" font-size="14" font-weight="700" letter-spacing="1.5">HARDCOVER</text>
+  </g>
+  <g transform="translate(826 57)">
+    <rect x="40" y="26" width="205" height="247" rx="18" fill="#0c1423" stroke="#526179" stroke-width="2"/>
+    <rect x="54" y="40" width="177" height="202" rx="7" fill="#e4e8e6"/>
+    <rect x="78" y="60" width="128" height="151" rx="5" fill="#27364c"/>
+    <path d="M78 177 206 92v47L78 223Z" fill="#f97316" opacity=".85"/>
+    <path d="M78 145 206 60v24L78 169Z" fill="#9fb6c9" opacity=".8"/>
+    <path d="M126 251h34" stroke="#65758b" stroke-width="4" stroke-linecap="round"/>
+    <rect x="0" y="187" width="114" height="50" rx="14" fill="#19283b" stroke="#526179"/>
+    <circle cx="24" cy="212" r="8" fill="#f97316"/>
+    <path d="M44 205h48M44 218h32" stroke="#a9bad1" stroke-width="5" stroke-linecap="round"/>
+    <rect x="194" y="81" width="118" height="47" rx="13" fill="#19283b" stroke="#526179"/>
+    <path d="M213 104h72" stroke="#43536b" stroke-width="6" stroke-linecap="round"/>
+    <path d="M213 104h46" stroke="url(#accent)" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>

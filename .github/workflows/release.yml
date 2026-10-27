@@ -1,0 +1,94 @@
+name: Windows release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out the tagged source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          enable-cache: true
+
+      - name: Install locked Python dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Install locked desktop dependencies
+        run: npm --prefix desktop ci
+
+      - name: Require the release tag to be on main
+        shell: pwsh
+        run: |
+          $tagCommit = (git rev-list -n 1 $env:GITHUB_REF_NAME).Trim()
+          git merge-base --is-ancestor $tagCommit origin/main
+          if ($LASTEXITCODE -ne 0) {
+            throw "The release tag must point to a commit already merged into main."
+          }
+
+      - name: Run Python tests
+        run: uv run pytest -q
+
+      - name: Check Python lint
+        run: uv run ruff check .
+
+      - name: Check Python formatting
+        run: uv run ruff format --check src tests
+
+      - name: Check Python types
+        run: uv run mypy
+
+      - name: Run desktop tests
+        run: npm --prefix desktop test -- --run
+
+      - name: Check desktop types
+        run: npm --prefix desktop run typecheck
+
+      - name: Check desktop lint
+        run: npm --prefix desktop run lint
+
+      - name: Build the Windows installer and portable package
+        run: npm --prefix desktop run make
+
+      - name: Prepare versioned release assets
+        shell: pwsh
+        run: ./scripts/prepare-electron-release.ps1 -Tag $env:GITHUB_REF_NAME
+
+      - name: Publish GitHub Release with installer, executable package, and hashes
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = $env:GITHUB_REF_NAME.Substring(1)
+          gh release create $env:GITHUB_REF_NAME `
+            "desktop/out/release-assets/KOReaderEcosystem-Setup.exe" `
+            "desktop/out/release-assets/KOReaderEcosystem-Windows-x64.zip" `
+            "desktop/out/release-assets/SHA256SUMS.txt" `
+            --repo $env:GITHUB_REPOSITORY `
+            --title "KOReader Ecosystem $env:GITHUB_REF_NAME" `
+            --notes-file "docs/releases/v$version.md" `
+            --verify-tag `
+            --latest

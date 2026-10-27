@@ -1,0 +1,58 @@
+{
+  "icon": "../assets/KOReaderEcosystem.ico",
+  "resources": [
+    {
+      "source": "../build/electron-sidecar/sidecar",
+      "destination": "sidecar"
+    },
+    {
+      "source": "../assets/KOReaderEcosystem.ico",
+      "destination": "KOReaderEcosystem.ico"
+    },
+    {
+      "source": "../LICENSE",
+      "destination": "LICENSE.txt"
+    },
+    {
+      "source": "../licenses/THIRD-PARTY-NOTICES.txt",
+      "destination": "THIRD-PARTY-NOTICES.txt"
+    },
+    {
+      "source": "../licenses/LGPL-3.0.txt",
+      "destination": "LGPL-3.0.txt"
+    },
+    {
+      "source": "../licenses/RESTIC-LICENSE.txt",
+      "destination": "RESTIC-LICENSE.txt"
+    },
+    {
+      "source": "../licenses/HARDCOVER-KOReader-PLUGIN-MIT.txt",
+      "destination": "HARDCOVER-KOReader-PLUGIN-MIT.txt"
+    },
+    {
+      "source": "../assets/fonts/Inter-OFL.txt",
+      "destination": "Inter-OFL.txt"
+    },
+    {
+      "source": "../assets/fonts/Lora-OFL.txt",
+      "destination": "Lora-OFL.txt"
+    }
+  ],
+  "excludedUserDataPatterns": [
+    "../Biblioteca do calibre/**",
+    "../Calibre Library/**",
+    "**/metadata.db*",
+    "**/*.sdr/**",
+    "**/*.epub",
+    "**/*.azw*",
+    "**/*.mobi",
+    "**/*.pdf",
+    "**/.env*",
+    "**/*credentials*",
+    "**/hardcover_config.lua",
+    "../staging/**",
+    "../backups/**",
+    "../restore-validation/**",
+    "../private/**"
+  ]
+}

@@ -1,0 +1,52 @@
+name: Windows desktop
+
+on:
+  push:
+    branches:
+      - main
+      - "codex/**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          enable-cache: true
+
+      - name: Install locked dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Install desktop dependencies
+        run: npm --prefix desktop ci
+
+      - name: Check package manifest
+        run: uv run pytest tests/unit/test_electron_package_manifest.py -q
+
+      - name: Test desktop renderer and bridge
+        run: npm --prefix desktop test -- --run
+
+      - name: Check desktop types
+        run: npm --prefix desktop run typecheck
+
+      - name: Check desktop lint
+        run: npm --prefix desktop run lint
+
+      - name: Build Windows installer and Python sidecar
+        run: npm --prefix desktop run make

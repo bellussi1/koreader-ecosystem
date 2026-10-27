@@ -1,0 +1,28 @@
+name: Feature request
+description: Suggest a focused improvement to the app or project.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem and the user benefit. Do not include private library data, account details, API keys, passwords, or device identifiers.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem should this solve?
+      placeholder: I have trouble when...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+    validations:
+      required: false

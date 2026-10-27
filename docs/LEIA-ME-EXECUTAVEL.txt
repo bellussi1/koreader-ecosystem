@@ -1,0 +1,76 @@
+KOREADER ECOSYSTEM — GUIA DE USO
+
+ABRIR O APLICATIVO
+1. Mantenha a pasta KOReaderEcosystem-next inteira; não mova o .exe sozinho.
+2. Abra KOReaderEcosystem.exe com duplo clique. Python e Terminal não são necessários.
+3. Configurações e estado local ficam em %LOCALAPPDATA%\KOReaderEcosystem.
+4. O executável Windows não precisa ficar aberto enquanto você lê. O KOReader no Kindle
+   envia progresso ao Hardcover pela rede Wi-Fi.
+5. A interface abre em tema escuro; quando a janela fica estreita, a navegação lateral
+   vira um seletor compacto no topo.
+
+PRIMEIRA CONFIGURAÇÃO
+1. Abra Configuração → Verificar este computador e confira as pastas Calibre e Restic.
+2. Salve a senha Restic no Gerenciador de Credenciais do Windows, se ainda não estiver lá.
+   Guarde outra cópia no seu gerenciador de senhas para recuperação.
+3. Em Configuração, informe uma chave nova do Hardcover no campo mascarado e escolha
+   Salvar e validar chave. Não cole a chave em mensagens ou documentos.
+4. A Estante consulta e atualiza sua conta Hardcover. Ela exige uma chave válida.
+
+LER NO KINDLE E SINCRONIZAR
+1. Para sair do modo USB, use “Ejetar” no Explorador do Windows se o Kindle aparecer como
+   unidade. Depois desconecte o cabo e confirme que o KOReader está no Wi-Fi.
+2. Abra o livro no KOReader e acesse o menu superior Marcador → Hardcover → Link book.
+3. Escolha o livro correto por ISBN ou busca manual. Confira o título e use Change edition
+   para selecionar a edição que corresponde ao seu exemplar.
+4. No menu Hardcover, habilite Track progress para esse livro. Mantenha o Wi-Fi ligado.
+   O progresso é enviado durante a leitura, em geral no máximo uma vez por minuto. A edição
+   selecionada é usada para converter a posição em páginas do Hardcover; em EPUBs essa
+   conversão pode ser aproximada.
+   Na primeira abertura com o rastreamento ativo, a correção instalada cria a leitura e grava
+   a data de início. Se o Kindle e o Hardcover tiverem posições diferentes depois de uma
+   leitura offline, o KOReader pergunta qual posição manter; escolha com base em qual está
+   mais atualizada.
+5. Ao concluir, marque o documento como terminado no KOReader. O plugin acompanha a ação
+   de conclusão e atualiza o status no Hardcover. O menu Update status também permite
+   enviar uma posição manualmente.
+6. Abra o executável Windows quando quiser consultar sua conta: Estante → Atualizar
+   estante. Pesquise por título ou autor e use o seletor para alternar entre Lendo agora,
+   Quero ler, Concluídos e Não terminei. Por padrão, somente edições reconhecidas como
+   Kindle/eBook aparecem. Desative Somente Kindle/eBook para ver edições físicas e formatos
+   não identificados; isso só muda a visualização local e não altera seus registros remotos.
+   A tela mostra capas, autores, progresso e datas disponíveis.
+7. Em Concluídos, escolha explicitamente uma nota entre 0,5 e 5 estrelas e clique em
+   Salvar avaliação. Você também pode escrever uma anotação no diário; a privacidade começa
+   como Privada e só é enviada quando você escolhe Salvar anotação.
+
+O executável Windows pode ficar fechado durante a leitura. O Kindle e o plugin precisam
+estar com acesso à internet para enviar atualizações; se você leu sem rede, confira o envio
+quando o Wi-Fi voltar. A extensão oficial pode atualizar páginas até uma vez por minuto e
+usa a página mapeada do documento, quando existe; em EPUBs refluíveis, o percentual pode ser
+estimado pela edição. Consulte o README oficial do plugin para opções de rastreamento:
+https://github.com/Billiam/hardcoverapp.koplugin
+
+USB, PLUGIN E BACKUP
+- Use USB para backup, leitura de sidecars, instalação ou atualização do plugin. Nesses
+  fluxos, deixe o Kindle na tela de conexão USB e não abra livros no KOReader.
+- Antes de backup ou atualização segura do plugin, feche o Calibre. Na tela Configuração,
+  a atualização do plugin cria um backup Restic, testa uma restauração temporária e guarda
+  a versão anterior para rollback antes de copiar o arquivo corrigido.
+- Em Sincronização, use Criar backup verificado e restaure sempre para uma pasta nova. O
+  snapshot local protege contra falhas de arquivos; para perda do computador, configure e
+  teste também um destino remoto em Configuração → Backup remoto.
+- A prévia de sidecars para o Calibre fica em Sincronização. Primeiro gere e revise
+  uma prévia; aplique apenas depois de conferir as correspondências e pendências.
+
+COMO AS TELAS SE DIVIDEM
+- Estante: busca por título ou autor, filtro por status e formato, progresso, datas, nota e diário.
+- Sincronização: prévia KOReader–Calibre, snapshots Restic e restauração para uma pasta nova.
+- Configuração: caminhos, credenciais protegidas, diagnóstico, plugin e destino remoto S3.
+
+ESTADO E LIMITES
+- O plugin instalado foi atualizado e a cópia foi conferida por SHA-256; a leitura real
+  ainda precisa ser conferida com o livro vinculado, o KOReader e o Hardcover online.
+- O aplicativo não roda como serviço em nuvem. A leitura pode sincronizar diretamente do
+  Kindle via Wi-Fi; ações USB e backups locais dependem do computador e do Kindle conectados.
+- O destino remoto continua dependendo de configurar o provedor e validar uma restauração.

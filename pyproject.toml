@@ -1,0 +1,101 @@
+[build-system]
+requires = ["hatchling>=1.28,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "koreader-ecosystem"
+version = "0.3.7"
+description = "Local companion for Calibre, KOReader, and Hardcover reading workflows"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE", "licenses/**"]
+requires-python = ">=3.14,<3.15"
+urls = { Repository = "https://github.com/bellussi1/koreader-ecosystem" }
+dependencies = [
+  "keyring>=25.6,<27",
+  "PySide6>=6.12,<6.13",
+]
+
+[project.scripts]
+koreader-ecosystem = "koreader_ecosystem.cli:main"
+koreader-ecosystem-gui = "koreader_ecosystem.ui.app:main"
+koreader-ecosystem-service = "koreader_ecosystem.ipc_service:main"
+# Keep generic aliases available for existing local scripts and older guides.
+reading = "koreader_ecosystem.cli:main"
+reading-gui = "koreader_ecosystem.ui.app:main"
+reading-service = "koreader_ecosystem.ipc_service:main"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.16,<2",
+  "pytest>=8.4,<10",
+  "ruff>=0.12,<1",
+]
+build = [
+  "nuitka>=4.1,<5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/koreader_ecosystem"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+  "integration: uses temporary synthetic services and local tool installations",
+  "live: requires an attached Kindle device",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+mypy_path = "src"
+files = ["src"]
+ignore_missing_imports = true
+
+[tool.pyside6-project]
+files = [
+  "src/koreader_ecosystem/__init__.py",
+  "src/koreader_ecosystem/backup.py",
+  "src/koreader_ecosystem/calibre_apply.py",
+  "src/koreader_ecosystem/calibre_catalog.py",
+  "src/koreader_ecosystem/calibre_library.py",
+  "src/koreader_ecosystem/cli.py",
+  "src/koreader_ecosystem/config.py",
+  "src/koreader_ecosystem/hardcover.py",
+  "src/koreader_ecosystem/hardcover_models.py",
+  "src/koreader_ecosystem/ipc_service.py",
+  "src/koreader_ecosystem/koreader.py",
+  "src/koreader_ecosystem/koreader_calibre.py",
+  "src/koreader_ecosystem/koreader_calibre_report.py",
+  "src/koreader_ecosystem/lua_sidecar.py",
+  "src/koreader_ecosystem/manifest.py",
+  "src/koreader_ecosystem/mtp.py",
+  "src/koreader_ecosystem/operation_history.py",
+  "src/koreader_ecosystem/portable_bundle.py",
+  "src/koreader_ecosystem/processes.py",
+  "src/koreader_ecosystem/remote_backup.py",
+  "src/koreader_ecosystem/restic.py",
+  "src/koreader_ecosystem/safety.py",
+  "src/koreader_ecosystem/secrets.py",
+  "src/koreader_ecosystem/services.py",
+  "src/koreader_ecosystem/sync_state.py",
+  "src/koreader_ecosystem/ui/__init__.py",
+  "src/koreader_ecosystem/ui/app.py",
+  "src/koreader_ecosystem/ui/backup_page.py",
+  "src/koreader_ecosystem/ui/device_sync_page.py",
+  "src/koreader_ecosystem/ui/device_monitor.py",
+  "src/koreader_ecosystem/ui/home_page.py",
+  "src/koreader_ecosystem/ui/operation_worker.py",
+  "src/koreader_ecosystem/ui/readings_page.py",
+  "src/koreader_ecosystem/ui/remote_page.py",
+  "src/koreader_ecosystem/ui/setup_page.py",
+  "src/koreader_ecosystem/ui/theme.py",
+]

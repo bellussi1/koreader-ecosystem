@@ -1,0 +1,64 @@
+# Personal library and device data
+/Biblioteca do calibre/
+/Calibre Library/
+/library/
+/data/
+/state/
+/private/
+/staging/
+/backups/
+/restore-validation/
+/exports/
+**/*.sdr/
+**/*.sdr/**
+**/*.epub
+**/*.azw
+**/*.azw3
+**/*.mobi
+**/*.pdf
+
+# Databases, secrets, logs, and local configuration
+**/metadata.db
+**/metadata.db-*
+*.db
+*.sqlite
+*.sqlite3
+!tests/fixtures/koreader/statistics-v20221111.sqlite3
+*.sqlite-*
+.env
+.env.*
+!.env.example
+**/hardcover_config.lua
+/config/local.toml
+/logs/
+*.log
+*.jsonl
+*.restic
+*.restic/**
+
+# Local Python/build tooling
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+nuitka-crash-report.xml
+src/koreader_ecosystem/ui/pysidedeploy.spec
+*.egg-info/
+.superpowers/brainstorm/
+.superpowers/sdd/
+/docs/audit/
+/docs/superpowers/
+/docs/images/debug-current-reading.png
+desktop/node_modules/
+desktop/.vite/
+desktop/out/
+desktop/coverage/
+desktop/*.tsbuildinfo
+.playwright-cli/
+npm-debug.log*

@@ -1,0 +1,55 @@
+name: Bug report
+description: Report a reproducible problem using synthetic or redacted data.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve KOReader Ecosystem. Never include book files, library databases, `.sdr` folders, backups, tokens, passwords, or unredacted logs/screenshots.
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Find this in Settings → About.
+      placeholder: 0.2.8
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      placeholder: Windows 11 24H2
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Use a small, repeatable example with fictional book data.
+      placeholder: |
+        1. Open...
+        2. Choose...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Redact personal paths, account identifiers, book details, and credentials.
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Related checks
+      description: Say whether Calibre was closed and whether a physical Kindle was involved.
+    validations:
+      required: false

@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -eu
+
+uv run --locked python -m ruff check .
+uv run --locked python -m ruff format --check src tests
+uv run --locked python -m mypy
+uv run --locked python -m pytest -q
+npm --prefix desktop run lint
+npm --prefix desktop run typecheck
+npm --prefix desktop test -- --run

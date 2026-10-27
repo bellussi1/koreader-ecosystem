@@ -1,0 +1,46 @@
+KOReader Ecosystem — third-party notices / avisos de terceiros
+
+The KOReader Ecosystem source code is licensed under the MIT License in the
+repository root. The notices below apply to third-party components only.
+
+O código original do KOReader Ecosystem está sob a licença MIT no arquivo
+LICENSE da raiz. Os avisos abaixo se aplicam somente a componentes de terceiros.
+
+Qt for Python / PySide6 and Qt libraries
+This build uses shared Qt libraries available under GNU LGPL v3. PySide6 and Qt
+may also be offered under GPL or commercial terms. See LGPL-3.0.txt and the
+official notices at https://doc.qt.io/qtforpython-6/ and
+https://www.qt.io/development/open-source-lgpl-obligations.
+
+Restic 0.19.1
+The bundled runtime/restic.exe is distributed under the BSD 2-Clause License.
+See RESTIC-LICENSE.txt. Source: https://github.com/restic/restic/tree/v0.19.1.
+Official binary: https://github.com/restic/restic/releases/tag/v0.19.1.
+
+Inter and Lora fonts
+The UI fonts are distributed under SIL Open Font License 1.1. License texts:
+assets/fonts/Inter-OFL.txt and assets/fonts/Lora-OFL.txt. Sources:
+https://github.com/google/fonts/tree/main/ofl/inter and
+https://github.com/google/fonts/tree/main/ofl/lora.
+
+Hardcover KOReader plugin patch
+patches/hardcoverapp-koplugin/0.4.0.patch contains changes derived from the
+Hardcover KOReader plugin by Billiam. The upstream plugin is licensed under MIT;
+its required notice is preserved in HARDCOVER-KOReader-PLUGIN-MIT.txt. Source:
+https://github.com/Billiam/hardcoverapp.koplugin.
+
+Python runtime and Python packages
+The standalone Python service and its dependencies retain their respective
+licenses. The Python Software Foundation License and package notices are
+provided by the packaged runtime/dependency distributions. Package versions are
+recorded in uv.lock; additional information is available at
+https://pypi.org/project/keyring/ and https://pypi.org/project/PySide6/.
+
+Electron and JavaScript packages
+Electron, React, Vite, and other JavaScript dependencies retain their respective
+licenses and notices in their upstream distributions and lockfile. See
+desktop/package-lock.json and each package's license metadata.
+
+Windows PowerShell
+The MTP adapter uses Windows PowerShell supplied by Windows; it does not bundle
+or install a separate system PowerShell runtime.
