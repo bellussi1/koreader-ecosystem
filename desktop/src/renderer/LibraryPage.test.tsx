@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+﻿// @vitest-environment jsdom
 
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -369,5 +369,55 @@ describe("LibraryPage", () => {
 
     expect(screen.getByText("003")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
+    expect(screen.getByRole("searchbox", { name: "Buscar nesta estante" })).toBeTruthy();
+  });
+
+  it("shows cover placeholder when a book has no cover in shelf layout", () => {
+    render(
+      <LibraryPage
+        language="en"
+        books={[book(1, "No Cover Book", ["An Author"])]}
+        status="ready"
+      />,
+    );
+
+    // Switch to shelf layout
+    fireEvent.click(screen.getByRole("button", { name: /Switch to covers/ }));
+
+    // Placeholder with BookOpen icon and number instead of cover image
+    expect(screen.getByText("001")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("shows cover placeholder when cover image fails to load in shelf layout", () => {
+    render(
+      <LibraryPage
+        language="en"
+        books={[
+          {
+            ...book(2, "Broken Cover Book", ["An Author"]),
+            cover_url: "https://example.com/broken-cover.jpg",
+          },
+        ]}
+        status="ready"
+      />,
+    );
+
+    // Switch to shelf layout
+    fireEvent.click(screen.getByRole("button", { name: /Switch to covers/ }));
+
+    // Initially shows the cover image
+    const coverImg = screen.getByRole("img", {
+      name: /Cover: Broken Cover Book/,
+    });
+    expect(coverImg).toBeTruthy();
+
+    // Simulate image load error
+    fireEvent.error(coverImg);
+
+    // After error, placeholder is shown
+    expect(screen.getByText("002")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
   });
 });
+
