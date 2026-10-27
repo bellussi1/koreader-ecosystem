@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+tone_instructions: "Be precise, constructive and concise. Prioritize actionable bugs, data-loss risks, security and regressions over style nits. Do not claim tests were run unless CI reports them."
+reviews:
+  profile: "chill"
+  high_level_summary: true
+  changed_files_summary: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - "main"
+  path_instructions:
+    - path: "src/**"
+      instructions: |
+        Follow AGENTS.md and CONTRIBUTING.md. Pay special attention to Calibre database integrity,
+        backup prerequisites, safe file writes, Kindle WPD/MTP assumptions, deterministic book identity
+        matching and handling of credentials. Flag realistic paths to data loss.
+    - path: "tests/**"
+      instructions: |
+        Check regression coverage, meaningful assertions and isolated tests. Avoid requesting
+        redundant tests or speculative failures. Prefer test-driven changes for behavior fixes.
+    - path: "desktop/**"
+      instructions: |
+        Check Electron IPC boundaries, React state and effect lifecycles, TypeScript typing,
+        file-path handling, image failure fallbacks, Windows packaging and test coverage.
+        Avoid suggesting direct unsafe filesystem operations from the renderer.
+    - path: ".github/workflows/**"
+      instructions: |
+        Check least-privilege GitHub token permissions, untrusted pull-request input handling,
+        third-party action pinning and possible secret exposure.
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "AGENTS.md"
+      - "CONTRIBUTING.md"
+      - "CONTRIBUTING.pt-BR.md"
