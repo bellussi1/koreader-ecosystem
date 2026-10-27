@@ -1,7 +1,7 @@
 {
   "name": "koreader-ecosystem-desktop",
   "productName": "KOReader Ecosystem",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Biblioteca local, Calibre e sincronização KOReader",
   "license": "MIT",
   "repository": {

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "koreader-ecosystem"
-version = "0.3.7"
+version = "0.3.8"
 description = "Local companion for Calibre, KOReader, and Hardcover reading workflows"
 readme = "README.md"
 license = "MIT"

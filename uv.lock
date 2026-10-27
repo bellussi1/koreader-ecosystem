@@ -161,7 +161,7 @@ wheels = [
 
 [[package]]
 name = "koreader-ecosystem"
-version = "0.3.7"
+version = "0.3.8"
 source = { editable = "." }
 dependencies = [
     { name = "keyring" },

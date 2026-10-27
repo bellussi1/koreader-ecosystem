@@ -1,6 +1,6 @@
 # Guia do aplicativo Windows
 
-Este guia descreve a versão Electron **0.3.7**. Consulte a [página de Releases](https://github.com/bellussi1/koreader-ecosystem/releases) para os instaladores disponíveis.
+Este guia descreve a versão Electron **0.3.8**. Consulte a [página de Releases](https://github.com/bellussi1/koreader-ecosystem/releases) para os instaladores disponíveis.
 
 ## Preparar
 

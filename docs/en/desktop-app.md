@@ -2,7 +2,7 @@
 
 [English](desktop-app.md) | [Português (Brasil)](../desktop-app.md)
 
-This guide describes the Electron app in version `0.3.7`. The interface supports English and Brazilian Portuguese. Choose **Settings → Interface language**; on first launch, the app follows the Windows language.
+This guide describes the Electron app in version `0.3.8`. The interface supports English and Brazilian Portuguese. Choose **Settings → Interface language**; on first launch, the app follows the Windows language.
 
 ## Setup
 
