@@ -51,7 +51,7 @@ PLUGIN_RELEASE_URL = (
     "hardcoverapp.koplugin.zip"
 )
 PLUGIN_PATCH_FILE = resolve_runtime_asset("hardcoverapp-0.4.0.patch")
-PLUGIN_PATCH_SHA256 = "c66f7a02618f1149b3f512d9c4abd14cd9538d8b88679aadce61c28fd32546fc"
+PLUGIN_PATCH_SHA256 = "5637fb9779b9c739beaafda1b1fe2a6ff918610633d3c35bba930aa465241d45"
 INSTALL_SCRIPT = resolve_runtime_asset("install-hardcover-plugin.ps1")
 _PLUGIN_NAME = "hardcoverapp.koplugin"
 _MAX_ARCHIVE_BYTES = 5 * 1024 * 1024
@@ -61,7 +61,7 @@ _PLUGIN_PREVIOUS_PATCH_SHA256 = {
     "hardcover/lib/hardcover_api.lua": (
         "77a35b968ab92355762e826a8506db69d73822dbb92df195b32ce19f3f2e58e3"
     ),
-    "main.lua": "9a0adfb57be95cdac66768325c7dde16d2e1e1cade7b3b5a29e382c1ccd91d81",
+    "main.lua": "3122eabfee7313a3a487ee54bc18a82e1fd7ff10cb327edcd7c5b663dd654425",
 }
 _REASON_CODES = frozenset(
     {

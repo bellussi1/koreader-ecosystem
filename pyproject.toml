@@ -27,6 +27,7 @@ reading-service = "koreader_ecosystem.ipc_service:main"
 
 [dependency-groups]
 dev = [
+  "lupa>=2.8,<3",
   "mypy>=1.16,<2",
   "pytest>=8.4,<10",
   "ruff>=0.12,<1",
