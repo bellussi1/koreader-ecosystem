@@ -58,6 +58,7 @@ Consulte o [guia de release](docs/releasing.md) para detalhes de versão e empac
 
 ## Pull requests
 
+- O Dependabot propõe atualizações semanais para GitHub Actions, dependências npm do aplicativo e o arquivo de bloqueio uv do Python. Cada proposta passa pelas mesmas verificações e revisão das demais alterações; não há merge automático.
 - Mantenha cada alteração focada e explique o comportamento visível ao usuário, a decisão de projeto e as limitações.
 - Inclua ou atualize testes para mudanças de comportamento, usando dados sintéticos.
 - Atualize juntas as documentações em inglês e português do Brasil quando mudar fluxos suportados ou comportamento visível ao usuário.
