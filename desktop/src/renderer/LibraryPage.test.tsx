@@ -315,4 +315,59 @@ describe("LibraryPage", () => {
 
     await waitFor(() => expect(onEditTagsBatch).toHaveBeenCalledWith([1, 2], ["Fantasia"], []));
   });
+
+  it("shows cover placeholder when a book has no cover", () => {
+    render(
+      <LibraryPage
+        language="en"
+        books={[book(1, "No Cover Book", ["An Author"])]}
+        status="ready"
+      />,
+    );
+
+    // Placeholder with BookOpen icon and number instead of cover image
+    expect(screen.getByText("001")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("shows cover placeholder when cover image fails to load", () => {
+    render(
+      <LibraryPage
+        language="en"
+        books={[
+          {
+            ...book(2, "Broken Cover Book", ["An Author"]),
+            cover_url: "https://example.com/broken-cover.jpg",
+          },
+        ]}
+        status="ready"
+      />,
+    );
+
+    // Initially shows the cover image
+    const coverImg = screen.getByRole("img", {
+      name: /Cover: Broken Cover Book/,
+    });
+    expect(coverImg).toBeTruthy();
+
+    // Simulate image load error
+    fireEvent.error(coverImg);
+
+    // After error, placeholder is shown
+    expect(screen.getByText("002")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
+  });
+
+  it("shows cover placeholder for missing cover in Portuguese", () => {
+    render(
+      <LibraryPage
+        language="pt-BR"
+        books={[book(3, "Livro sem capa", ["Autora"])]}
+        status="ready"
+      />,
+    );
+
+    expect(screen.getByText("003")).toBeTruthy();
+    expect(screen.queryByRole("img")).toBeNull();
+  });
 });
