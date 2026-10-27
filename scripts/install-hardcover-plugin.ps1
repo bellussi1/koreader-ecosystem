@@ -253,6 +253,7 @@ function Invoke-SafePluginUpdate {
             if (-not [string]::IsNullOrWhiteSpace([string]$entry.legacy_sha256)) {
                 $acceptedHashes += [string]$entry.legacy_sha256
             }
+            $acceptedHashes += @($entry.legacy_sha256s)
             if (-not ($acceptedHashes -ccontains $currentHash)) {
                 throw "plugin_version_mismatch"
             }
@@ -430,6 +431,10 @@ try {
                     [string]$rawEntry.legacy_sha256 -notmatch '^[0-9a-f]{64}$')) {
                 throw "package_invalid"
             }
+            $legacyHashes = @($rawEntry.legacy_sha256s)
+            if ($legacyHashes.Count -gt 8 -or @($legacyHashes | Where-Object { $_ -isnot [string] -or $_ -cnotmatch '^[0-9a-f]{64}$' }).Count -gt 0) {
+                throw "package_invalid"
+            }
             $sourceEntry = $sourceByPath[$relative]
             if ($null -eq $sourceEntry) { throw "package_invalid" }
             $patchedHash = (Get-FileHash -LiteralPath $sourceEntry.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -439,6 +444,7 @@ try {
                 original_sha256 = ([string]$rawEntry.original_sha256).ToLowerInvariant()
                 patched_sha256 = $patchedHash
                 legacy_sha256 = if ([string]::IsNullOrWhiteSpace([string]$rawEntry.legacy_sha256)) { $null } else { ([string]$rawEntry.legacy_sha256).ToLowerInvariant() }
+                legacy_sha256s = $legacyHashes
                 source_size = [long]$sourceEntry.Size
             })
             $totalBytes += [long]$sourceEntry.Size

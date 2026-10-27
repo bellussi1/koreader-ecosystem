@@ -412,6 +412,7 @@ def test_plugin_update_keeps_verified_local_rollback_copies_for_all_patched_file
         ("main.lua", b"original lifecycle\n", b"patched lifecycle\n"),
         ("hardcover/lib/cache.lua", b"original cache\n", b"patched cache\n"),
         ("hardcover/lib/hardcover_api.lua", b"original api\n", b"patched api\n"),
+        ("hardcover/lib/page_mapper.lua", b"original mapper\n", b"patched mapper\n"),
     ]
     patch_path = tmp_path / "0.4.0.patch"
     patch_bytes = json.dumps(
@@ -502,7 +503,7 @@ def test_plugin_update_keeps_verified_local_rollback_copies_for_all_patched_file
     )
 
     assert result.updated
-    assert result.file_count == 3
+    assert result.file_count == 4
     assert result.total_bytes == patched_bytes
     assert result.rollback_backup_id is not None
     for relative, original, _patched in patch_operations:
@@ -517,7 +518,10 @@ def test_plugin_update_keeps_verified_local_rollback_copies_for_all_patched_file
         assert item["path"] == relative
         assert item["original_sha256"] == hashlib.sha256(original).hexdigest()
         assert item["patched_sha256"] == hashlib.sha256(patched).hexdigest()
-        assert item["legacy_sha256"] == koreader._PLUGIN_PREVIOUS_PATCH_SHA256[relative]
+        assert item["legacy_sha256"] == koreader._PLUGIN_PREVIOUS_PATCH_SHA256.get(relative)
+        assert item["legacy_sha256s"] == list(
+            koreader._PLUGIN_ACCEPTED_LEGACY_SHA256.get(relative, ())
+        )
     assert "reader.lua" not in json.dumps(update_manifest)
 
 
@@ -573,3 +577,13 @@ def test_install_flow_removes_temporary_plaintext_configuration_on_failure(
 
     assert len(created_staging) == 1
     assert not created_staging[0].exists()
+
+
+def test_update_supports_multiple_verified_legacy_main_versions() -> None:
+    import koreader_ecosystem.koreader as koreader
+
+    hashes = koreader._PLUGIN_ACCEPTED_LEGACY_SHA256["main.lua"]
+    assert "3122eabfee7313a3a487ee54bc18a82e1fd7ff10cb327edcd7c5b663dd654425" in hashes
+    assert "7cca8f61302cf584604bc24b4e32924dbc4739b7e98ea5f0d1f9ddceebf302a5" in hashes
+    script = koreader.INSTALL_SCRIPT.read_text(encoding="utf-8")
+    assert "legacy_sha256s" in script

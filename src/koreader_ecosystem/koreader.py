@@ -63,6 +63,12 @@ _PLUGIN_PREVIOUS_PATCH_SHA256 = {
     ),
     "main.lua": "3122eabfee7313a3a487ee54bc18a82e1fd7ff10cb327edcd7c5b663dd654425",
 }
+_PLUGIN_ACCEPTED_LEGACY_SHA256 = {
+    "main.lua": (
+        _PLUGIN_PREVIOUS_PATCH_SHA256["main.lua"],
+        "7cca8f61302cf584604bc24b4e32924dbc4739b7e98ea5f0d1f9ddceebf302a5",
+    ),
+}
 _REASON_CODES = frozenset(
     {
         "authentication_failed",
@@ -560,7 +566,7 @@ def update_hardcover_plugin(
                 PurePosixPath(entry.filename).relative_to(_PLUGIN_NAME).as_posix(): entry
                 for entry in entries
             }
-            manifest: list[dict[str, str]] = []
+            manifest: list[dict[str, Any]] = []
             patched_total_bytes = 0
             for relative in changed_paths:
                 source_path = source_directory.joinpath(*PurePosixPath(relative).parts)
@@ -577,14 +583,14 @@ def update_hardcover_plugin(
                 patched_bytes = source_path.read_bytes()
                 if patched_bytes != patched_content or not patched_bytes:
                     raise PluginInstallError("source_changed")
-                item = {
+                item: dict[str, Any] = {
                     "path": relative,
                     "original_sha256": hashlib.sha256(archive.read(original_entry)).hexdigest(),
                     "patched_sha256": hashlib.sha256(patched_bytes).hexdigest(),
                 }
                 previous_hash = _PLUGIN_PREVIOUS_PATCH_SHA256.get(relative)
-                if previous_hash is not None:
-                    item["legacy_sha256"] = previous_hash
+                item["legacy_sha256"] = previous_hash
+                item["legacy_sha256s"] = list(_PLUGIN_ACCEPTED_LEGACY_SHA256.get(relative, ()))
                 manifest.append(item)
                 patched_total_bytes += len(patched_bytes)
     except PluginInstallError:
