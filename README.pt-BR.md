@@ -19,11 +19,19 @@
 
 ![Biblioteca Calibre com capas, pesquisa e filtros usando dados fictícios](docs/images/library-calibre.png)
 
-O KOReader Ecosystem reúne sua biblioteca Calibre e suas estantes Hardcover em uma interface, ajuda a enviar livros ao Kindle e oferece ferramentas para proteger e revisar seus dados. Um plugin separado do KOReader pode enviar o progresso ao Hardcover pelo Wi-Fi, mesmo com o aplicativo Windows fechado.
+Tenha sua biblioteca Calibre e suas estantes Hardcover em uma interface. Pesquise livros, edite metadados, envie ebooks ao Kindle e proteja seus dados com backup no Windows. Um plugin separado do KOReader pode enviar seu progresso ao Hardcover pelo Wi-Fi, mesmo com o aplicativo Windows fechado.
 
 A interface pode ser usada em **português do Brasil ou inglês**. Altere o idioma em **Configuração → Idioma**; na primeira abertura, o aplicativo segue o idioma do Windows.
 
 > **Projeto em estágio inicial:** o ciclo completo KOReader–Hardcover e alguns fluxos USB precisam de mais testes no aparelho. Consulte o [estado das funcionalidades](#estado-das-funcionalidades) e o [roadmap](docs/roadmap.md).
+
+## Comece por aqui
+
+1. **Instale** a [versão mais recente para Windows](https://github.com/bellussi1/koreader-ecosystem/releases/latest) e localize sua biblioteca Calibre.
+2. **Conecte** sua conta Hardcover em Configuração e configure o plugin no KOReader do seu leitor.
+3. **Use sua biblioteca:** edite um livro, envie-o pelo USB ou consulte suas estantes no Hardcover.
+
+Veja a [primeira configuração](#primeira-configuração) e os [fluxos de uso](#fluxos-de-uso) para mais detalhes.
 
 ## Como funciona
 
@@ -124,7 +132,7 @@ A transferência usa WPD/MTP, sem depender de uma letra de unidade. Ela não sub
 4. Para concluir, marque o livro como terminado no KOReader. Confira as datas e o status na conta Hardcover e depois atualize as estantes na aplicação.
 5. Notas de diário e avaliações continuam sendo ações manuais suas.
 
-Não escolha uma edição apenas pela capa: paginações diferentes podem causar percentuais diferentes. EPUBs refluíveis podem exigir uma estimativa de páginas. O teste real de ponta a ponta da leitura KOReader–Hardcover continua pendente.
+Escolha a edição correta no Hardcover, mesmo que seu ebook seja de outra edição. Na versão de desenvolvimento, o progresso de EPUB usa a posição de leitura do KOReader e a converte para uma página da edição selecionada no Hardcover; a quantidade de páginas deve estar disponível e a edição precisa corresponder. A release mais recente pode ainda não incluir essa alteração. A revisão de conflitos e o teste real de ponta a ponta continuam necessários.
 
 ### Importar ou exportar histórico de leitura
 
@@ -177,7 +185,7 @@ O script `scripts/build-windows-app.ps1` gera a distribuição PySide6 legada; a
 
 ## Como contribuir
 
-Contribuições são bem-vindas, desde documentação e traduções até acessibilidade, testes e integrações. Consulte as [issues abertas](https://github.com/bellussi1/koreader-ecosystem/issues), apresente sua proposta na issue correspondente e leia o [guia de contribuição](CONTRIBUTING.pt-BR.md) antes de abrir um pull request. Use dados fictícios nos exemplos e diferencie testes automatizados de validações no dispositivo.
+Você pode ajudar com documentação, traduções, acessibilidade, testes automatizados e compatibilidade com dispositivos. Consulte as [issues abertas](https://github.com/bellussi1/koreader-ecosystem/issues), apresente sua proposta na issue correspondente e leia o [guia de contribuição](CONTRIBUTING.pt-BR.md) antes de abrir um pull request. Use dados fictícios nos exemplos e diferencie testes automatizados de validações no dispositivo.
 
 O [roadmap](docs/roadmap.md) acompanha os trabalhos em andamento, incluindo confiabilidade no Kindle, integrações e recuperação de backups. Para relatar problemas de segurança, use os canais privados indicados na [política de segurança](SECURITY.pt-BR.md).
 

@@ -16,13 +16,21 @@
 
 <p align="center"><a href="README.md">English</a> | <a href="README.pt-BR.md">Português (Brasil)</a></p>
 
-<p align="center"><a href="#first-time-setup">Get started</a> · <a href="#what-the-app-does">Features</a> · <a href="#how-it-works">How it works</a> · <a href="#screenshots">Screenshots</a> · <a href="#contributing">Contribute</a></p>
+<p align="center"><a href="https://github.com/bellussi1/koreader-ecosystem/releases/latest"><strong>Download for Windows</strong></a> · <a href="#first-time-setup">Get started</a> · <a href="#feature-status">Features</a> · <a href="#screenshots">Screenshots</a> · <a href="#contributing">Contribute</a></p>
 
 ![Calibre library view with book covers, search, and filters using demo data](docs/images/library-calibre-en.png)
 
-Managing your ebooks, reading device, and online reading lists can mean switching between several apps. KOReader Ecosystem brings your Calibre catalog and Hardcover shelves into one place, helps you send books to a Kindle, and gives you tools to protect and review your data.
+Keep your Calibre library and Hardcover shelves within reach. Browse your books, edit metadata, send an ebook to your Kindle, and back up your data from a Windows desktop app. A KOReader plugin can send your reading progress to Hardcover over Wi-Fi.
 
-> **Early-stage project:** The complete KOReader-to-Hardcover reading cycle and some USB workflows need further device testing. See [feature status](#feature-status) and the [roadmap](docs/en/roadmap.md).
+> **Early-stage project:** Individual Kindle transfers have been tested, but the complete reading and synchronization cycle still needs validation on a physical device. See [feature status](#feature-status) and the [roadmap](docs/en/roadmap.md).
+
+## Start here
+
+1. **Install** the [latest Windows release](https://github.com/bellussi1/koreader-ecosystem/releases/latest) and locate your Calibre library.
+2. **Connect** your Hardcover account in Settings and configure the KOReader plugin on your reader.
+3. **Manage your library:** edit a book, send it over USB, or review your Hardcover shelves.
+
+See [first-time setup](#first-time-setup) and [common workflows](#common-workflows) for details.
 
 ## How it works
 
@@ -123,7 +131,7 @@ The transfer uses WPD/MTP and does not depend on a drive letter. Existing files 
 4. To finish a book, mark it as finished in KOReader. Check the status and dates on Hardcover, then refresh the app's shelves.
 5. Journal entries and ratings remain manual actions.
 
-Do not choose an edition by its cover alone: different pagination can produce different percentages. Reflowable EPUB page counts may be estimates. Real end-to-end reading validation is still required before treating the complete workflow as verified.
+Choose the Hardcover edition carefully, even when you read a different ebook edition. On the current development branch, EPUB progress is calculated from the KOReader reading position and converted to a page in the selected Hardcover edition; the page count must be available and the edition must match. The latest release may not include this change yet. Conflict review and a real end-to-end test are still required.
 
 ### Import or export reading history
 
@@ -177,7 +185,7 @@ npm --prefix desktop run make
 
 ## Contributing
 
-Contributions are welcome, from documentation and translations to accessibility, tests, and integration work. Browse the [open issues](https://github.com/bellussi1/koreader-ecosystem/issues) or [good first issues](https://github.com/bellussi1/koreader-ecosystem/labels/good%20first%20issue), share a proposal on the relevant issue, and read the [contribution guide](CONTRIBUTING.md) before opening a pull request. Use fictional data in examples and keep device-specific validation separate from automated tests.
+You can help with documentation, translations, accessibility, automated tests, and device compatibility. Browse the [open issues](https://github.com/bellussi1/koreader-ecosystem/issues) or [good first issues](https://github.com/bellussi1/koreader-ecosystem/labels/good%20first%20issue), share a proposal on the relevant issue, and read the [contribution guide](CONTRIBUTING.md) before opening a pull request. Use fictional data in examples and keep device-specific validation separate from automated tests.
 
 The [roadmap](docs/en/roadmap.md) tracks work in progress, including device reliability, provider integrations, and backup recovery. Please report security concerns privately using the [security policy](SECURITY.md).
 
