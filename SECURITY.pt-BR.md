@@ -6,7 +6,7 @@
 
 Não relate vulnerabilidades em issues, discussões ou pull requests públicos.
 
-Se o GitHub Private Vulnerability Reporting estiver habilitado neste repositório, use esse recurso. A disponibilidade ainda não foi confirmada. Se estiver indisponível, entre em contato em privado com a pessoa mantenedora pelo GitHub e solicite um canal seguro antes de compartilhar detalhes técnicos. O projeto ainda não publica um endereço dedicado para segurança nem um prazo de resposta.
+Use o [relato privado de vulnerabilidades do GitHub](https://github.com/bellussi1/koreader-ecosystem/security/advisories/new) para contatar as pessoas mantenedoras em privado. Se o recurso estiver indisponível, entre em contato em privado pelo GitHub e solicite um canal seguro antes de compartilhar detalhes técnicos. O projeto ainda não publica um endereço dedicado para segurança nem um prazo de resposta.
 
 Inclua uma descrição breve do componente afetado, impacto, versão ou commit afetado, uma reprodução usando dados sintéticos e possíveis formas de mitigação. Não envie uma prova de conceito que acesse dados de outra pessoa ou cause danos.
 

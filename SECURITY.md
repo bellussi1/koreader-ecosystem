@@ -6,7 +6,7 @@
 
 Please do not report vulnerabilities in public issues, discussions, or pull requests.
 
-If GitHub Private Vulnerability Reporting is enabled for this repository, use it. Its availability has not been confirmed. If it is unavailable, contact the repository maintainer privately through GitHub and ask for a secure reporting channel before sharing technical details. This project does not currently publish a dedicated security contact address or a response-time commitment.
+Use [GitHub Private Vulnerability Reporting](https://github.com/bellussi1/koreader-ecosystem/security/advisories/new) to contact the maintainers privately. If it is unavailable, contact the repository maintainer privately through GitHub and ask for a secure reporting channel before sharing technical details. This project does not currently publish a dedicated security contact address or a response-time commitment.
 
 Include a concise description of the affected component, impact, affected version or commit, a reproduction using synthetic data, and any known mitigations. Avoid sending proof-of-concept material that accesses another person's data or causes damage.
 
