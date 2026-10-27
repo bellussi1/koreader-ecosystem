@@ -44,6 +44,10 @@ npm --prefix desktop run typecheck
 npm --prefix desktop run lint
 ```
 
+GitHub Actions runs three checks on pull requests: **Python checks** runs tests, Ruff, and mypy; **Windows desktop and package** tests the renderer and bridge and builds the Windows package; **Secret scan** scans Git history. A new commit cancels older runs of the same pull request, while pushes, scheduled scans, and manual runs remain independent. The separate **Windows release** workflow runs on version tags and publishes the installer, ZIP, and hashes after its checks pass. It does not cancel an in-progress release.
+
+To investigate a failure, open the failed check in the pull request and expand its failed step. Run the corresponding command above locally. Do not share private library data or credentials in logs or issue comments. Local checks and CI cannot replace tests on a physical Kindle.
+
 To build the Windows desktop package, run:
 
 ```powershell

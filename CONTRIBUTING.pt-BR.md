@@ -44,6 +44,10 @@ npm --prefix desktop run typecheck
 npm --prefix desktop run lint
 ```
 
+O GitHub Actions executa três verificações nos pull requests: **Python checks** roda testes, Ruff e mypy; **Windows desktop and package** testa a interface e a comunicação e gera o pacote Windows; **Secret scan** verifica o histórico Git. Um novo commit cancela execuções antigas do mesmo pull request; pushes, varreduras agendadas e execuções manuais continuam independentes. O workflow separado **Windows release** roda nas tags de versão e publica instalador, ZIP e hashes depois das verificações. Ele não cancela uma release em andamento.
+
+Para investigar uma falha, abra a verificação no pull request e expanda a etapa que falhou. Execute localmente o comando correspondente acima. Não compartilhe dados privados da biblioteca nem credenciais em logs ou comentários. As verificações locais e o CI não substituem testes em um Kindle físico.
+
 Para gerar o pacote desktop do Windows:
 
 ```powershell

@@ -5,6 +5,8 @@
   <p>
     <a href="https://github.com/bellussi1/koreader-ecosystem/releases/latest"><img alt="Última versão" src="https://img.shields.io/github/v/release/bellussi1/koreader-ecosystem?label=versão" /></a>
     <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/ci.yml"><img alt="CI Python" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/desktop.yml"><img alt="Verificações do aplicativo Windows" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/desktop.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/secrets.yml"><img alt="Varredura de segredos" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/secrets.yml/badge.svg?branch=main" /></a>
     <a href="https://github.com/bellussi1/koreader-ecosystem/stargazers"><img alt="Estrelas no GitHub" src="https://img.shields.io/github/stars/bellussi1/koreader-ecosystem?style=social" /></a>
     <a href="LICENSE"><img alt="Licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg" /></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/plataforma-Windows%20x64-0078D4" />
@@ -75,7 +77,7 @@ As capturas mostram a interface React atual com livros e estados fictícios. Nã
 
 ## Baixar para Windows
 
-Baixe o [instalador, o ZIP portátil e os hashes SHA-256](https://github.com/bellussi1/koreader-ecosystem/releases/tag/v0.3.7) na página da release. Para compilar o código, consulte o [guia de contribuição](CONTRIBUTING.pt-BR.md).
+Baixe o [instalador, o ZIP portátil e os hashes SHA-256](https://github.com/bellussi1/koreader-ecosystem/releases/latest) na página da release. Para compilar o código, consulte o [guia de contribuição](CONTRIBUTING.pt-BR.md).
 
 No instalador, siga as etapas do Windows. Para usar o ZIP, extraia a pasta inteira e execute `KOReaderEcosystem.exe` dentro dela; o executável depende dos outros arquivos do pacote. Confira o SHA-256 informado em `SHA256SUMS.txt` antes de abrir. O aplicativo ainda não tem assinatura digital, então o Windows pode mostrar um aviso de publicador desconhecido.
 

@@ -6,6 +6,8 @@
   <p>
     <a href="https://github.com/bellussi1/koreader-ecosystem/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/bellussi1/koreader-ecosystem?label=release" /></a>
     <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/ci.yml"><img alt="Python CI" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/ci.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/desktop.yml"><img alt="Windows desktop checks" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/desktop.yml/badge.svg?branch=main" /></a>
+    <a href="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/secrets.yml"><img alt="Secret scan" src="https://github.com/bellussi1/koreader-ecosystem/actions/workflows/secrets.yml/badge.svg?branch=main" /></a>
     <a href="https://github.com/bellussi1/koreader-ecosystem/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/bellussi1/koreader-ecosystem?style=social" /></a>
     <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
     <img alt="Windows x64" src="https://img.shields.io/badge/platform-Windows%20x64-0078D4" />
@@ -74,7 +76,7 @@ The interface is available in English and Brazilian Portuguese. Choose the langu
 
 ## Download for Windows
 
-Download the [installer, portable ZIP, and SHA-256 hashes](https://github.com/bellussi1/koreader-ecosystem/releases/tag/v0.3.7) from the release page. To build from source, see the [contribution guide](CONTRIBUTING.md).
+Download the [installer, portable ZIP, and SHA-256 hashes](https://github.com/bellussi1/koreader-ecosystem/releases/latest) from the release page. To build from source, see the [contribution guide](CONTRIBUTING.md).
 
 For the ZIP package, extract the entire folder and run `KOReaderEcosystem.exe` from inside it; the executable needs the other package files. Verify the SHA-256 values in `SHA256SUMS.txt` before running the downloads. The installer is not digitally signed, so Windows may show an unknown-publisher warning.
 
