@@ -559,3 +559,28 @@ def test_validate_restore_rejects_invalid_snapshot_id_before_restic(tmp_path: Pa
 
     assert not target.exists()
     assert restic.calls == []
+
+
+def test_application_state_backup_preserves_saved_automation_preferences(tmp_path: Path) -> None:
+    import json
+
+    from koreader_ecosystem.config import save_config
+
+    state = tmp_path / "state"
+    state.mkdir()
+    destination = tmp_path / "snapshot"
+    destination.mkdir()
+    config = AppConfig(
+        calibre_library=tmp_path / "library",
+        restic_repository=tmp_path / "backup",
+        state_root=state,
+        daily_backup_enabled=True,
+        daily_backup_time="21:30",
+        backup_on_kindle_connect=True,
+    )
+    save_config(config, state / "config.json")
+    assert _copy_application_state(state, destination)
+    saved = json.loads((destination / "config.json").read_text(encoding="utf-8"))
+    assert saved["daily_backup_enabled"] is True
+    assert saved["daily_backup_time"] == "21:30"
+    assert saved["backup_on_kindle_connect"] is True

@@ -222,6 +222,9 @@ _APPLICATION_CONFIG_KEYS = frozenset(
         "restic_remote_repository",
         "restic_remote_region",
         "state_root",
+        "daily_backup_enabled",
+        "daily_backup_time",
+        "backup_on_kindle_connect",
     }
 )
 
