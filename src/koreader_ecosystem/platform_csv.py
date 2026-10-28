@@ -644,7 +644,7 @@ def csv_reading_record_from_mapping(value: object) -> CsvReadingRecord:
         exclusive_shelf=cast(str | None, value["exclusive_shelf"]),
         reading_status=cast(str | None, value["reading_status"]),
         shelves=tuple(shelves),
-        read_count=cast(int | None, read_count),
+        read_count=read_count,
         date_added=cast(str | None, value["date_added"]),
         date_read=cast(str | None, value["date_read"]),
         review=cast(str | None, value["review"]),
