@@ -17,7 +17,7 @@ All participants are expected to follow the [code of conduct](CODE_OF_CONDUCT.md
 
 ## Development environment
 
-The supported desktop target is Windows x64. Install Git, PowerShell 7, Node.js 24 or later with npm, and Python 3.14 with `uv`.
+The supported desktop target is Windows x64. Install Git, PowerShell 7, Node.js 24.15 or later in the 24.x series, or 26 or later with npm, and Python 3.14 with `uv`.
 
 From the repository root:
 

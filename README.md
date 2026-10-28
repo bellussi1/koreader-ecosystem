@@ -158,7 +158,7 @@ The Electron app packages a React interface and a Python sidecar. The Python pac
 ### Requirements
 
 - Windows x64
-- Node.js 24 or later and npm
+- Node.js 24.15 or later in the 24.x series, or 26 or later and npm
 - Python 3.14 and `uv`
 - PowerShell 7
 - Git
