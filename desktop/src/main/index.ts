@@ -13,6 +13,7 @@ import {
 import type { BackendProcessHost } from "./backend-client";
 import { registerIpcHandlers } from "./ipc-handlers";
 import { scheduledBackupLaunch, scheduledBackupTaskLauncher } from "./scheduled-backup-launch";
+import { prepareShortcutIcon } from "./shortcut-icon";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
 declare const MAIN_WINDOW_VITE_NAME: string;
@@ -147,10 +148,10 @@ function handleSquirrelEvent(): boolean {
   const event = process.argv[1];
   const executableName = path.basename(process.execPath);
   const updateExecutable = path.resolve(path.dirname(process.execPath), "..", "Update.exe");
-  const iconPath = path.join(process.resourcesPath, "KOReaderEcosystem.ico");
   let updateArguments: string[] | undefined;
 
   if (event === "--squirrel-install" || event === "--squirrel-updated") {
+    const iconPath = prepareShortcutIcon(process.resourcesPath, path.dirname(updateExecutable));
     updateArguments = ["--createShortcut", executableName, "--icon", iconPath];
   } else if (event === "--squirrel-uninstall") {
     updateArguments = ["--removeShortcut", executableName];

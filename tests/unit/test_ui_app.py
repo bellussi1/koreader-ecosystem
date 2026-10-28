@@ -14,15 +14,22 @@ from koreader_ecosystem.ui.app import NAV_SECTIONS, MainWindow, create_applicati
 
 
 class StubServices:
+    state_root: Path
+
     def __init__(self) -> None:
         self.private_token = "PRIVATE_TOKEN_SENTINEL"
         self.private_path = r"C:\private\library"
         self.config = AppConfig(
             calibre_library=Path(self.private_path),
             restic_repository=Path(r"C:\private\repository"),
-            state_root=Path(r"C:\private\state"),
+            state_root=self.state_root,
         )
         self.hardcover_ready = False
+
+
+@pytest.fixture(autouse=True)
+def isolated_stub_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(StubServices, "state_root", tmp_path, raising=False)
 
 
 @pytest.fixture(scope="session")
