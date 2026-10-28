@@ -1610,3 +1610,59 @@ def test_platform_csv_mapping_rejects_changed_source_without_staging_a_batch(
         )
 
     assert service.list_platform_csv_imports(limit=10).batches == ()
+
+
+def test_restored_daily_backup_reconciles_task_once(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import koreader_ecosystem.services as services
+
+    calls: list[str] = []
+
+    class Scheduler:
+        def __init__(self, *, executable: Path) -> None:
+            pass
+
+        def register_daily_backup(self, start_time: str) -> None:
+            calls.append(start_time)
+
+    monkeypatch.setattr(services, "TaskScheduler", Scheduler)
+    monkeypatch.setenv("KOREADER_ECOSYSTEM_SCHEDULER_EXECUTABLE", "C:/Apps/KOReaderEcosystem.exe")
+    monkeypatch.setattr(services, "restic_password_is_stored", lambda: True)
+    service = ApplicationServices(
+        replace(_config(tmp_path), daily_backup_enabled=True, daily_backup_time="06:30"),
+        restic=FakeRestic(),
+    )
+    assert service.backup_automation_status()["daily_backup_needs_reactivation"] is False
+    assert service.backup_automation_status()["daily_backup_needs_reactivation"] is False
+    assert calls == ["06:30"]
+
+
+def test_daily_backup_reactivation_failure_is_visible_and_retryable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import koreader_ecosystem.services as services
+
+    calls: list[str] = []
+
+    class Scheduler:
+        def __init__(self, *, executable: Path) -> None:
+            pass
+
+        def register_daily_backup(self, start_time: str) -> None:
+            calls.append(start_time)
+            if len(calls) == 1:
+                raise services.AutomationError("scheduled_task_unavailable")
+
+    monkeypatch.setattr(services, "TaskScheduler", Scheduler)
+    monkeypatch.setenv("KOREADER_ECOSYSTEM_SCHEDULER_EXECUTABLE", "C:/Apps/KOReaderEcosystem.exe")
+    monkeypatch.setattr(services, "restic_password_is_stored", lambda: True)
+    service = ApplicationServices(
+        replace(_config(tmp_path), daily_backup_enabled=True), restic=FakeRestic()
+    )
+    assert service.backup_automation_status()["daily_backup_needs_reactivation"] is True
+    status = service.configure_backup_automation(
+        daily_backup_enabled=True, daily_backup_time="20:00", backup_on_kindle_connect=False
+    )
+    assert status["daily_backup_needs_reactivation"] is False
+    assert calls == ["20:00", "20:00"]

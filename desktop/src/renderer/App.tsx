@@ -1614,6 +1614,14 @@ function SettingsPage({
             />
           </label>
         </div>
+        {backupAutomation?.daily_backup_needs_reactivation ? (
+          <div role="alert">
+            <p>{tx("Não foi possível ativar o backup diário. Confira a senha do Restic e tente reativar a tarefa.")}</p>
+            <button type="button" disabled={automationSaving} onClick={() => void saveAutomation({ daily_backup_enabled: true })}>
+              {tx("Reativar backup diário")}
+            </button>
+          </div>
+        ) : null}
         <div className="settings-automation-notes">
           <p>{tx("A tarefa diária roda somente com sua sessão do Windows iniciada e o computador acordado. Ela não acessa o dispositivo.")}</p>
           <p>{tx("O backup ao conectar exige a aplicação aberta e a tela USB ativa. Ao desligar uma opção, execuções futuras são removidas; um backup que já começou termina com segurança.")}</p>
