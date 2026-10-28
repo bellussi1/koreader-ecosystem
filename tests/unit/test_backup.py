@@ -142,7 +142,7 @@ def test_application_state_backup_preserves_versioned_database_records(tmp_path:
 
     with sqlite3.connect(destination / "application-state.sqlite3") as restored:
         assert restored.execute("PRAGMA integrity_check").fetchone() == ("ok",)
-        assert restored.execute("PRAGMA user_version").fetchone() == (6,)
+        assert restored.execute("PRAGMA user_version").fetchone() == (7,)
         assert restored.execute(
             "SELECT provider, external_type, external_id FROM book_identities"
         ).fetchone() == ("hardcover", "book", "book-42")

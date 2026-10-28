@@ -1,5 +1,9 @@
 export type AllowedOperation =
   | "system.status"
+  | "local-library.list"
+  | "local-library.get"
+  | "local-library.add"
+  | "local-library.save"
   | "calibre.list"
   | "calibre.preview-import"
   | "calibre.add-import"
@@ -38,6 +42,10 @@ export type AllowedOperation =
   | "platform-csv.export";
 export type IpcChannel =
   | "app:status"
+  | "local-library:list"
+  | "local-library:get"
+  | "local-library:add"
+  | "local-library:save"
   | "calibre:list"
   | "calibre:select-import"
   | "calibre:select-cover"
@@ -522,7 +530,25 @@ export interface PlatformCsvExportResult {
   warnings: string[];
 }
 
+export interface LocalBook {
+  book_id: string;
+  title: string;
+  author: string;
+  status: "to_read" | "reading" | "finished" | "stopped";
+  progress: number | null;
+  rating: number | null;
+  started_on: string | null;
+  finished_on: string | null;
+  notes: string;
+}
+
 export interface ReadingApi {
+  localLibrary?: {
+    list(offset?: number): Promise<LocalBook[]>;
+    get(bookId: string): Promise<LocalBook>;
+    add(title: string, author: string): Promise<LocalBook>;
+    save(book: LocalBook): Promise<LocalBook>;
+  };
   app: {
     status(): Promise<ServiceStatus>;
   };
@@ -1041,7 +1067,7 @@ function asProfileRecoveryPreview(value: unknown): ProfileRecoveryPreview {
     typeof value.source_name !== "string" ||
     !Number.isSafeInteger(value.schema_version) ||
     Number(value.schema_version) < 1 ||
-    Number(value.schema_version) > 5 ||
+    Number(value.schema_version) > 7 ||
     !isRecord(value.row_counts) ||
     !Object.values(value.row_counts).every((count) =>
       typeof count === "number" && Number.isSafeInteger(count) && count >= 0
@@ -1062,7 +1088,7 @@ function asProfileRecoveryResult(value: unknown): ProfileRecoveryResult {
     !/^[0-9a-f]{32}$/.test(value.checkpoint_id) ||
     !Number.isSafeInteger(value.schema_version) ||
     Number(value.schema_version) < 1 ||
-    Number(value.schema_version) > 5 ||
+    Number(value.schema_version) > 7 ||
     value.requires_restart !== true
   ) {
     throw invalidResponse();
@@ -1448,8 +1474,32 @@ function asPlatformCsvExportResult(value: unknown): PlatformCsvExportResult {
   return value as unknown as PlatformCsvExportResult;
 }
 
+function asLocalBook(value: unknown): LocalBook {
+  if (!isRecord(value) || typeof value.book_id !== "string" || !/^[0-9a-f]{32}$/.test(value.book_id) ||
+    typeof value.title !== "string" || typeof value.author !== "string" || typeof value.notes !== "string" ||
+    !["to_read", "reading", "finished", "stopped"].includes(String(value.status)) ||
+    (value.progress !== null && (typeof value.progress !== "number" || !Number.isFinite(value.progress) || value.progress < 0 || value.progress > 100)) ||
+    (value.rating !== null && (typeof value.rating !== "number" || !Number.isFinite(value.rating) || value.rating < 0 || value.rating > 5)) ||
+    (value.started_on !== null && typeof value.started_on !== "string") ||
+    (value.finished_on !== null && typeof value.finished_on !== "string")) throw invalidResponse();
+  return value as unknown as LocalBook;
+}
+
 export function createReadingApi(transport: IpcTransport): ReadingApi {
   return Object.freeze({
+    localLibrary: Object.freeze({
+      list: async (offset = 0) => {
+        const result = await transport.invoke("local-library:list", { offset });
+        if (!isRecord(result) || !Array.isArray(result.books)) throw invalidResponse();
+        return result.books.map(asLocalBook);
+      },
+      get: async (bookId: string) => asLocalBook(await transport.invoke("local-library:get", { book_id: bookId })),
+      add: async (title: string, author: string) => asLocalBook(await transport.invoke("local-library:add", { title, author })),
+      save: async (book: LocalBook) => {
+        const { book_id, status, progress, rating, started_on, finished_on, notes } = book;
+        return asLocalBook(await transport.invoke("local-library:save", { book_id, status, progress, rating, started_on, finished_on, notes }));
+      },
+    }),
     app: Object.freeze({
       status: async () => asServiceStatus(await transport.invoke("app:status")),
     }),

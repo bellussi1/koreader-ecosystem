@@ -2,6 +2,23 @@ import { describe, expect, it, vi } from "vitest";
 import { createReadingApi } from "./contracts";
 
 describe("reading API", () => {
+  it("validates and sends local reading records over the bridge", async () => {
+    const book = {
+      book_id: "a".repeat(32), title: "Fixture", author: "Writer", status: "reading",
+      progress: 25, rating: null, started_on: null, finished_on: null, notes: "Private fixture",
+    };
+    const transport = { invoke: vi.fn(async (channel: string) => channel === "local-library:list" ? { books: [book] } : book) };
+    const api = createReadingApi(transport);
+    expect(await api.localLibrary!.list(100)).toEqual([book]);
+    expect(transport.invoke).toHaveBeenCalledWith("local-library:list", { offset: 100 });
+    await api.localLibrary!.save(book as import("./contracts").LocalBook);
+    expect(transport.invoke).toHaveBeenCalledWith("local-library:save", {
+      book_id: book.book_id, status: "reading", progress: 25, rating: null,
+      started_on: null, finished_on: null, notes: "Private fixture",
+    });
+    const invalid = createReadingApi({ invoke: async () => ({ books: [{ ...book, progress: 101 }] }) });
+    await expect(invalid.localLibrary!.list()).rejects.toThrow("invalid_response");
+  });
   it("loads and saves validated local backup automation settings", async () => {
     const timestamp = "2026-10-26T20:00:00Z";
     const status = {
@@ -316,23 +333,25 @@ describe("reading API", () => {
     await expect(leakingApi.platformCsv.page(importId)).rejects.toThrow("invalid_response");
   });
 
-  it("accepts profile schema version five after the outbox review migration", async () => {
+  it("accepts the local library schema for preview and recovery", async () => {
     const previewId = "abcdefab-cdef-abcd-efab-cdefabcdefab";
     const api = createReadingApi({
       invoke: async (channel) => channel === "profile-recovery:preview"
         ? {
           preview_id: previewId,
           source_name: "Restore",
-          schema_version: 5,
-          row_counts: { csv_import_rows: 2 },
+          schema_version: 7,
+          row_counts: { local_books: 2 },
           configured_calibre: false,
           configured_restic: true,
           configured_remote_backup: false,
         }
-        : undefined,
+        : { checkpoint_id: "a".repeat(32), schema_version: 7, requires_restart: true },
     });
     await expect(api.profileRecovery.preview("12345678-1234-1234-1234-123456789abc"))
-      .resolves.toMatchObject({ schema_version: 5 });
+      .resolves.toMatchObject({ schema_version: 7 });
+    await expect(api.profileRecovery.apply(previewId))
+      .resolves.toMatchObject({ schema_version: 7 });
   });
 
   it("validates review details for KOReader progress conflicts and unmatched sidecars", async () => {
@@ -428,6 +447,7 @@ describe("reading API", () => {
       "calibre:list",
     ]);
     expect(Object.keys(api)).toEqual([
+      "localLibrary",
       "app",
       "calibre",
       "koreader",

@@ -24,6 +24,7 @@ export function getUiLocale(language: UiLanguage): string {
 
 const messages = {
   "nav.library": { "pt-BR": "Biblioteca", en: "Library" },
+  "nav.local": { "pt-BR": "Leitura local", en: "Local reading" },
   "nav.sync": { "pt-BR": "Kindle e sincronização", en: "KOReader & sync" },
   "nav.sync.compact": { "pt-BR": "Kindle", en: "KOReader" },
   "nav.settings": { "pt-BR": "Configuração", en: "Settings" },

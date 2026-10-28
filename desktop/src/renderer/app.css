@@ -1226,3 +1226,19 @@ button { color: inherit; }
   .reading-actions { display: flex; flex-direction: column-reverse; gap: 8px; }
   .reading-actions button { width: 100%; min-height: 40px; }
 }
+
+.local-library { max-width: 960px; display: grid; gap: 16px; }
+.local-library h1, .local-library h2 { margin: 0; font-family: var(--serif); font-weight: 400; }
+.local-library p { margin: 0; color: var(--muted); }
+.local-library form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; padding: 16px; background: var(--surface-raised); border: 1px solid var(--line); border-radius: 8px; }
+.local-library fieldset { grid-column: 1 / -1; min-width: 0; margin: 0; padding: 0; border: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.local-library form h2, .local-library form label:has(textarea), .local-library form [role="status"] { grid-column: 1 / -1; }
+.local-library label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+.local-library input, .local-library select, .local-library textarea { width: 100%; min-width: 0; min-height: 40px; padding: 8px 10px; color: var(--text); background: var(--canvas-deep); border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+.local-library textarea { min-height: 120px; resize: vertical; }
+.local-library button { min-height: 40px; padding: 8px 12px; color: var(--text); background: var(--surface-hover); border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.local-library button:disabled { opacity: .5; cursor: not-allowed; }
+.local-library button:focus-visible, .local-library input:focus-visible, .local-library select:focus-visible, .local-library textarea:focus-visible { outline: 2px solid var(--orange-soft); outline-offset: 2px; }
+.local-library ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.local-library li { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: var(--muted); }
+.local-library li button { text-align: left; overflow-wrap: anywhere; }

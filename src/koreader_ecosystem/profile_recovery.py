@@ -57,7 +57,7 @@ _DATABASE_NAME = "application-state.sqlite3"
 _CONFIG_NAME = "config.json"
 _MAX_CONFIG_BYTES = 65_536
 _MAX_DATABASE_BYTES = 512 * 1024 * 1024
-_SUPPORTED_SCHEMA_VERSION = 6
+_SUPPORTED_SCHEMA_VERSION = 7
 _CONFIG_KEYS = frozenset(
     {
         "calibre_library",
@@ -68,6 +68,7 @@ _CONFIG_KEYS = frozenset(
     }
 )
 _ROW_TABLES = (
+    "local_books",
     "book_identities",
     "identity_links",
     "reading_events",

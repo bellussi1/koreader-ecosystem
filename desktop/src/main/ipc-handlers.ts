@@ -167,6 +167,27 @@ export function registerIpcHandlers(
 
   handle("app:status", "system.status");
 
+  ipcMain.handle("local-library:list", (event: IpcMainInvokeEvent, payload: unknown) => {
+    assertTrusted(event);
+    if (!isRecord(payload)) throw new BackendClientError("invalid_payload");
+    return client.request("local-library.list", payload);
+  });
+  ipcMain.handle("local-library:add", (event: IpcMainInvokeEvent, payload: unknown) => {
+    assertTrusted(event);
+    if (!isRecord(payload)) throw new BackendClientError("invalid_payload");
+    return client.request("local-library.add", payload);
+  });
+  ipcMain.handle("local-library:get", (event: IpcMainInvokeEvent, payload: unknown) => {
+    assertTrusted(event);
+    if (!isRecord(payload)) throw new BackendClientError("invalid_payload");
+    return client.request("local-library.get", payload);
+  });
+  ipcMain.handle("local-library:save", (event: IpcMainInvokeEvent, payload: unknown) => {
+    assertTrusted(event);
+    if (!isRecord(payload)) throw new BackendClientError("invalid_payload");
+    return client.request("local-library.save", payload);
+  });
+
   ipcMain.handle("calibre:list", async (event: IpcMainInvokeEvent) => {
     assertTrusted(event);
     return loadPublicCalibreCatalog();
@@ -1146,10 +1167,16 @@ export function registerIpcHandlers(
 
   return () => {
     ipcMain.removeHandler("app:status");
+    ipcMain.removeHandler("local-library:list");
+    ipcMain.removeHandler("local-library:get");
+    ipcMain.removeHandler("local-library:add");
+    ipcMain.removeHandler("local-library:save");
     ipcMain.removeHandler("calibre:list");
     ipcMain.removeHandler("calibre:select-import");
+    ipcMain.removeHandler("calibre:select-cover");
     ipcMain.removeHandler("calibre:add-import");
     ipcMain.removeHandler("calibre:edit");
+    ipcMain.removeHandler("calibre:bulk-tags");
     ipcMain.removeHandler("calibre:remove");
     ipcMain.removeHandler("kindle:status");
     ipcMain.removeHandler("kindle:send");

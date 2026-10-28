@@ -7,7 +7,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Literal, TextIO
+from typing import Any, Literal, TextIO, cast
 
 from koreader_ecosystem.backup import BackupError
 from koreader_ecosystem.calibre_catalog import (
@@ -303,6 +303,10 @@ def build_dispatcher(
     def dispatch(operation: str, payload: dict[str, object]) -> object:
         allowed = {
             "system.status",
+            "local-library.list",
+            "local-library.get",
+            "local-library.add",
+            "local-library.save",
             "calibre.list",
             "calibre.preview-import",
             "calibre.add-import",
@@ -869,6 +873,87 @@ def build_dispatcher(
             config = config_loader()
         except ConfigError:
             raise IpcOperationError("configuration_unavailable") from None
+
+        if operation.startswith("local-library."):
+            from koreader_ecosystem.application_state import ApplicationState
+            from koreader_ecosystem.local_library import LocalLibrary, LocalLibraryError
+
+            services = services_factory(config)
+            library = LocalLibrary(ApplicationState(services.application_state_database))
+            try:
+                if operation == "local-library.list" and set(payload).issubset({"offset"}):
+                    local_offset = payload.get("offset", 0)
+                    if type(local_offset) is not int or local_offset < 0:
+                        raise IpcOperationError("invalid_payload")
+                    return {
+                        "books": [asdict(book) for book in library.list_books(offset=local_offset)]
+                    }
+                if operation == "local-library.get" and set(payload) == {"book_id"}:
+                    local_id = payload["book_id"]
+                    if not isinstance(local_id, str) or not re.fullmatch(r"[0-9a-f]{32}", local_id):
+                        raise IpcOperationError("invalid_payload")
+                    return asdict(library.get_book(local_id))
+                if operation == "local-library.add" and set(payload) == {"title", "author"}:
+                    title, author = payload["title"], payload["author"]
+                    if not isinstance(title, str) or not isinstance(author, str):
+                        raise IpcOperationError("invalid_payload")
+                    with services._operation_lock():
+                        return asdict(library.add_book(title=title, author=author))
+                fields = {
+                    "book_id",
+                    "status",
+                    "progress",
+                    "rating",
+                    "started_on",
+                    "finished_on",
+                    "notes",
+                }
+                if operation != "local-library.save" or set(payload) != fields:
+                    raise IpcOperationError("invalid_payload")
+                local_book_id, local_status, notes = (
+                    payload["book_id"],
+                    payload["status"],
+                    payload["notes"],
+                )
+                if not isinstance(local_book_id, str) or not re.fullmatch(
+                    r"[0-9a-f]{32}", local_book_id
+                ):
+                    raise IpcOperationError("invalid_payload")
+                if (
+                    not isinstance(local_status, str)
+                    or local_status not in {"to_read", "reading", "finished", "stopped"}
+                    or not isinstance(notes, str)
+                ):
+                    raise IpcOperationError("invalid_payload")
+                progress, rating = payload["progress"], payload["rating"]
+                started_on, finished_on = payload["started_on"], payload["finished_on"]
+                if any(
+                    value is not None
+                    and (isinstance(value, bool) or not isinstance(value, (int, float)))
+                    for value in (progress, rating)
+                ):
+                    raise IpcOperationError("invalid_payload")
+                if any(
+                    value is not None and not isinstance(value, str)
+                    for value in (started_on, finished_on)
+                ):
+                    raise IpcOperationError("invalid_payload")
+                with services._operation_lock():
+                    return asdict(
+                        library.save_reading(
+                            local_book_id,
+                            status=cast(
+                                Literal["to_read", "reading", "finished", "stopped"], local_status
+                            ),
+                            progress=cast(float | None, progress),
+                            rating=cast(float | None, rating),
+                            started_on=cast(str | None, started_on),
+                            finished_on=cast(str | None, finished_on),
+                            notes=notes,
+                        )
+                    )
+            except LocalLibraryError:
+                raise IpcOperationError("invalid_payload") from None
 
         if operation.startswith("profile-recovery."):
             if profile_restore_root is None:

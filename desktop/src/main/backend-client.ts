@@ -12,6 +12,10 @@ const BACKUP_OPERATION_TIMEOUT_MS = 8 * 60 * 60 * 1000;
 const PROFILE_RECOVERY_TIMEOUT_MS = 30 * 60 * 1000;
 const KNOWN_OPERATIONS = new Set<AllowedOperation>([
   "system.status",
+  "local-library.list",
+  "local-library.get",
+  "local-library.add",
+  "local-library.save",
   "calibre.list",
   "calibre.preview-import",
   "calibre.add-import",

@@ -47,7 +47,7 @@ def test_creates_versioned_private_schema_and_persists_preview_idempotently(
         row_count = connection.execute("SELECT count(*) FROM preview_items").fetchone()[0]
 
     assert database.is_file()
-    assert version == 6
+    assert version == 7
     assert row_count == 1
     assert saved["created_at"] == "2026-10-23T12:00:00+00:00"
     assert saved["items"] == [item]

@@ -11,7 +11,7 @@ class ApplicationStateError(RuntimeError):
     """Raised when the private application database cannot be opened safely."""
 
 
-_SCHEMA_VERSION = 6
+_SCHEMA_VERSION = 7
 _MIGRATIONS: dict[int, tuple[str, ...]] = {
     1: (
         """
@@ -213,6 +213,23 @@ _MIGRATIONS: dict[int, tuple[str, ...]] = {
     6: (
         "ALTER TABLE import_batches ADD COLUMN mapping_digest TEXT NOT NULL DEFAULT '' "
         "CHECK (mapping_digest = '' OR length(mapping_digest) = 64)",
+    ),
+    7: (
+        """
+        CREATE TABLE local_books (
+            book_id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            author TEXT NOT NULL,
+            status TEXT NOT NULL CHECK (status IN ('to_read', 'reading', 'finished', 'stopped')),
+            progress REAL CHECK (progress IS NULL OR progress BETWEEN 0 AND 100),
+            rating REAL CHECK (rating IS NULL OR rating BETWEEN 0 AND 5),
+            started_on TEXT,
+            finished_on TEXT,
+            notes TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        )
+        """,
     ),
 }
 _LEGACY_SYNC_TABLES: tuple[tuple[str, tuple[str, ...], tuple[str, ...]], ...] = (

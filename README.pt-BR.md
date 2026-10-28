@@ -47,13 +47,14 @@ Os arquivos permanecem no Calibre. O aplicativo acessa o Kindle conectado por US
 ## O que o aplicativo faz
 
 - **Biblioteca Calibre:** lista livros e capas, pesquisa, ordena, importa um arquivo por vez, edita metadados e capas, campos personalizados simples e permite revisar alterações de tags em lote.
+- **Leitura local:** permite cadastrar título e autor e registrar situação, progresso, datas, avaliação e anotações sem conta em serviço externo.
 - **Estantes Hardcover:** consulta Quero ler, Lendo e Lidos, mostra a leitura atual mais recentemente atualizada e filtra edições digitais. A edição e o status remotos são mantidos separados dos metadados Calibre.
 - **Enviar ao Kindle:** exporta um formato da ficha Calibre e transfere pelo USB/WPD/MTP. A operação exige confirmação, backup anterior, não sobrescreve arquivos e tenta verificar a cópia por SHA-256.
 - **Leitura no KOReader:** o aplicativo importa eventos e anotações locais para revisão; o plugin sincroniza progresso e datas com o Hardcover pela rede do Kindle. A sincronização direta funciona com o aplicativo Windows fechado.
 - **Histórico CSV:** permite mapear cabeçalhos em inglês ou português antes de pré-visualizar arquivos Goodreads, StoryGraph ou Maratona. Só os valores mapeados são guardados; colunas ignoradas e notas privadas são descartadas, e resenhas não são importadas até você mapear a coluna explicitamente. Revise a prévia paginada e candidatos locais no Calibre/Hardcover; salve no computador ou exporte um lote confirmado no formato Goodreads. Nenhuma conta remota é alterada; resenhas mapeadas só entram na exportação se você optar.
 - **Backup e recuperação:** a interface Electron cria snapshots Restic criptografados da biblioteca Calibre, dos dados locais do app e, quando o Kindle está em modo USB, também do dispositivo. Inclui cópia consistente do banco SQLite, configuração e histórico de operações; restaura para uma pasta nova, valida os arquivos e permite revisar a recuperação do perfil local com checkpoint. Backup remoto e recuperação independente ainda não foram validados.
 
-O aplicativo tem três páginas: **Biblioteca**, **Kindle e sincronização** e **Configuração**. Calibre, Hardcover e KOReader continuam sendo fontes diferentes para seus próprios dados.
+O aplicativo tem as páginas **Biblioteca**, **Leitura local**, **Kindle e sincronização** e **Configuração**. Registros locais, Calibre, Hardcover e KOReader continuam sendo fontes diferentes para seus próprios dados.
 
 ## Estado das funcionalidades
 
@@ -61,6 +62,7 @@ O aplicativo tem três páginas: **Biblioteca**, **Kindle e sincronização** e 
 
 | Funcionalidade | Estado | Escopo atual |
 | --- | --- | --- |
+| Registros de leitura locais | Parcial | Cadastro manual de título e autor e um estado de leitura editável com notas; sem arquivo de ebook, vinculação automática, sincronização remota, edição do título, exclusão ou histórico de sessões. Os dados ficam no computador sem criptografia específica do banco; o backup criptografado existente ainda exige Calibre e Restic. |
 | Catálogo Calibre | Disponível | Capas, pesquisa, ordenação, filtros e paginação. |
 | Adicionar e editar livros | Parcial | Importação de um arquivo por vez; metadados comuns, capas, alguns campos personalizados e revisão de tags em lote. Escritas exigem backup e releitura. |
 | Estantes Hardcover | Disponível | Consulta das estantes, leitura atual, filtro de edições digitais e cache dentro do orçamento da API. |

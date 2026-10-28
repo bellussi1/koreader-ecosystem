@@ -42,12 +42,13 @@ import type {
   ServiceStatus,
 } from "../shared/contracts";
 import { LibraryPage, type HardcoverUiStatus, type LibraryStatus } from "./LibraryPage";
+import { LocalLibraryPage } from "./LocalLibraryPage";
 import { ReadingHistoryPanel } from "./ReadingHistoryPanel";
 import { UiButton, UiInput, UiSelect } from "./ui/controls";
 import { getUiLocale, loadLanguagePreference, localizeText, resolveInitialLanguage, saveLanguagePreference, translate, type TranslationKey, type UiLanguage } from "./i18n";
 import { StableDeviceBackupTrigger } from "./backup-automation-trigger";
 
-type AppPage = "library" | "kindle" | "settings";
+type AppPage = "library" | "local" | "kindle" | "settings";
 
 const navigation: Array<{
   id: AppPage;
@@ -56,6 +57,7 @@ const navigation: Array<{
   icon: typeof BookOpen;
 }> = [
   { id: "library", labelKey: "nav.library", compactLabelKey: "nav.library", icon: BookOpen },
+  { id: "local", labelKey: "nav.local", compactLabelKey: "nav.local", icon: BookOpenCheck },
   {
     id: "kindle",
     labelKey: "nav.sync",
@@ -423,6 +425,9 @@ export function App() {
             onRetry={() => void loadLibrary()}
             onRetryHardcover={() => void loadHardcover()}
           />
+        ) : null}
+        {window.reading.localLibrary ? (
+          <div hidden={page !== "local"}><LocalLibraryPage language={language} api={window.reading.localLibrary} /></div>
         ) : null}
         {page === "kindle" ? (
           <KindlePage
@@ -971,6 +976,7 @@ function formatRestoreResult(result: BackupRestoreResult, language: UiLanguage =
 
 function formatRecoveryCounts(counts: Record<string, number>, language: UiLanguage = "pt-BR"): string {
   const labels: Record<string, string> = {
+    local_books: language === "en" ? "local books" : "livros locais",
     book_identities: language === "en" ? "identities" : "identidades",
     identity_links: language === "en" ? "links" : "vínculos",
     reading_events: language === "en" ? "reading events" : "eventos de leitura",

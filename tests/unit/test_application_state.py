@@ -29,8 +29,8 @@ def test_initializes_versioned_application_state_schema(tmp_path: Path) -> None:
             "SELECT version FROM schema_migrations ORDER BY version"
         ).fetchall()
 
-    assert version == 6
-    assert migrations == [(1,), (2,), (3,), (4,), (5,), (6,)]
+    assert version == 7
+    assert migrations == [(1,), (2,), (3,), (4,), (5,), (6,), (7,)]
     assert "mapping_digest" in import_batch_columns
     assert {
         "previews",
@@ -116,8 +116,8 @@ def test_upgrades_v1_and_preserves_existing_reading_events(tmp_path: Path) -> No
         import_id_column = connection.execute("PRAGMA table_info(reading_events)").fetchall()
         migration_count = connection.execute("SELECT count(*) FROM schema_migrations").fetchone()[0]
 
-    assert version == 6
-    assert migration_count == 6
+    assert version == 7
+    assert migration_count == 7
     assert {column[1] for column in import_id_column} >= {"import_id"}
     assert event == ("event-1", "sidecar-1", '{"progress":0.25}')
 
@@ -168,8 +168,8 @@ def test_upgrades_v2_to_v3_and_preserves_annotation_versions(tmp_path: Path) -> 
         foreign_keys = connection.execute("PRAGMA foreign_key_list(annotation_versions)").fetchall()
         indexes = {row[1] for row in connection.execute("PRAGMA index_list(annotation_versions)")}
 
-    assert version == 6
-    assert migration_versions == [(1,), (2,), (3,), (4,), (5,), (6,)]
+    assert version == 7
+    assert migration_versions == [(1,), (2,), (3,), (4,), (5,), (6,), (7,)]
     assert annotation == ("annotation-version-1", '{"text":"preserve"}')
     assert "import_id" in columns
     assert any(row[2] == "import_batches" and row[3] == "import_id" for row in foreign_keys)
@@ -244,8 +244,8 @@ def test_upgrades_v3_to_v4_and_preserves_existing_import_data(tmp_path: Path) ->
         columns = {row[1] for row in connection.execute("PRAGMA table_info(csv_import_rows)")}
         foreign_keys = connection.execute("PRAGMA foreign_key_list(csv_import_rows)").fetchall()
 
-    assert version == 6
-    assert migration_versions == [(1,), (2,), (3,), (4,), (5,), (6,)]
+    assert version == 7
+    assert migration_versions == [(1,), (2,), (3,), (4,), (5,), (6,), (7,)]
     assert existing == ("legacy-import", "koreader", "applied", 2, "")
     assert columns == {"import_id", "row_number", "row_type", "record_json", "reason_code"}
     assert any(row[2] == "import_batches" and row[3] == "import_id" for row in foreign_keys)

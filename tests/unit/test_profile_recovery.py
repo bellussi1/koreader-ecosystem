@@ -71,7 +71,7 @@ def test_preview_reads_verified_profile_and_redacts_config_paths(tmp_path: Path)
 
     preview = preview_profile_recovery(source)
 
-    assert preview.schema_version == 6
+    assert preview.schema_version == 7
     assert preview.row_counts["book_identities"] == 1
     assert preview.configured_calibre is True
     assert str(source) not in json.dumps(preview.to_dict())
@@ -197,12 +197,13 @@ def test_apply_checkpoints_current_profile_and_keeps_current_state_root(tmp_path
     assert original_metadata.read_bytes() == original_metadata_before
 
 
-def test_apply_recovers_a_v5_profile_and_migrates_the_staged_copy_to_v6(tmp_path: Path) -> None:
+def test_apply_recovers_a_v5_profile_and_migrates_the_staged_copy(tmp_path: Path) -> None:
     source = _restored_profile(tmp_path / "verified-v5-restore")
     source_database = source / "tree" / "application-state" / "application-state.sqlite3"
     with sqlite3.connect(source_database) as connection:
         connection.execute("ALTER TABLE import_batches DROP COLUMN mapping_digest")
-        connection.execute("DELETE FROM schema_migrations WHERE version=6")
+        connection.execute("DROP TABLE local_books")
+        connection.execute("DELETE FROM schema_migrations WHERE version >= 6")
         connection.execute("PRAGMA user_version = 5")
 
     active_root = tmp_path / "active-state"
@@ -233,8 +234,8 @@ def test_apply_recovers_a_v5_profile_and_migrates_the_staged_copy_to_v6(tmp_path
     with sqlite3.connect(active_root / "application-state.sqlite3") as connection:
         version = connection.execute("PRAGMA user_version").fetchone()[0]
         columns = {row[1] for row in connection.execute("PRAGMA table_info(import_batches)")}
-    assert result.schema_version == 6
-    assert version == 6
+    assert result.schema_version == 7
+    assert version == 7
     assert "mapping_digest" in columns
 
 
@@ -329,3 +330,35 @@ def test_apply_requires_explicit_confirmation(tmp_path: Path) -> None:
             active_config=_config(tmp_path),
             confirmed=False,
         )
+
+
+def test_profile_recovery_preserves_local_reading_records(tmp_path: Path) -> None:
+    from koreader_ecosystem.local_library import LocalLibrary
+
+    source = _restored_profile(tmp_path / "verified-local-restore")
+    database = source / "tree" / "application-state" / "application-state.sqlite3"
+    library = LocalLibrary(ApplicationState(database))
+    book = library.add_book(title="Fictional book", author="Fictional author")
+    library.save_reading(
+        book.book_id,
+        status="reading",
+        progress=37,
+        rating=None,
+        started_on="2026-10-01",
+        finished_on=None,
+        notes="Private fictional note",
+    )
+    preview = preview_profile_recovery(source)
+    assert preview.row_counts["local_books"] == 1
+    assert "Private fictional note" not in json.dumps(preview.to_dict())
+    active_root = tmp_path / "active-state"
+    apply_profile_recovery(
+        source,
+        active_root,
+        preview.source_fingerprint,
+        active_config=_config(tmp_path),
+        confirmed=True,
+    )
+    restored = LocalLibrary(ApplicationState(active_root / "application-state.sqlite3"))
+    assert restored.get_book(book.book_id).notes == "Private fictional note"
+    assert restored.get_book(book.book_id).progress == 37

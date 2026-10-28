@@ -46,13 +46,14 @@ Your book files remain in Calibre. The app connects to the Kindle over USB and t
 ## What the app does
 
 - 📚 **Browse your library:** find Calibre books by title, author, or filters; add a file and edit supported metadata or covers.
+- 📓 **Keep local reading records:** add a title and author and save status, progress, dates, a rating, and notes without a service account.
 - 📖 **Explore your shelves:** see your Hardcover lists and most recently updated current read.
 - ↗️ **Send a book to Kindle:** transfer a selected file over USB with a backup, collision protection, and verification.
 - 🔄 **Track your reading:** use the KOReader plugin to send progress to Hardcover over Wi-Fi. Import local reading history for review in the app.
 - 🗂️ **Move reading history:** map and review CSV files from Goodreads, StoryGraph, or Maratona. Export a confirmed batch in Goodreads-compatible format.
 - 🔒 **Back up locally:** create encrypted Restic snapshots and restore them to a new folder.
 
-The app has three pages: **Library**, **KOReader & sync**, and **Settings**. Calibre, Hardcover, and KOReader remain separate sources of truth.
+The app has **Library**, **Local reading**, **KOReader & sync**, and **Settings** pages. Local records, Calibre, Hardcover, and KOReader remain separate sources of truth.
 
 ## Feature status
 
@@ -60,6 +61,7 @@ The app has three pages: **Library**, **KOReader & sync**, and **Settings**. Cal
 
 | Feature | Status | Current scope |
 | --- | --- | --- |
+| Local reading records | Partial | Manual title/author records and one editable reading state with notes; no ebook file, automatic linking, remote synchronization, title editing, deletion, or reading-session history. App data is stored locally without separate database encryption; existing encrypted backup still requires Calibre and Restic. |
 | Calibre catalog | Available | Browse covers, search, sort, filter, and paginate books. |
 | Add and edit Calibre books | Partial | One-file imports; common metadata, covers, eligible single-value custom fields, and reviewed batch tag changes. Writes require a backup and reread. |
 | Hardcover shelves | Available | Read-only shelves, current reading, digital-edition filters, and a local cache within the API budget. |
