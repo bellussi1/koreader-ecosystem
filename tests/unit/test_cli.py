@@ -668,3 +668,37 @@ def test_koreader_apply_removes_staging_after_application(
     }
     assert len(staged) == 1
     assert not staged[0].exists()
+
+
+def test_doctor_outputs_only_credential_presence_not_secrets(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    import koreader_ecosystem.cli as cli
+    import koreader_ecosystem.secrets as secrets
+
+    config = _config(tmp_path)
+    monkeypatch.setattr(cli, "load_config", lambda _: config)
+    monkeypatch.setattr(cli, "ResticClient", FakeRestic)
+    monkeypatch.setattr("koreader_ecosystem.services._running_process_names", lambda: [])
+    monkeypatch.setattr("koreader_ecosystem.services._check_calibre_integrity", lambda _: None)
+    monkeypatch.setattr(
+        "koreader_ecosystem.services.detect_kindle",
+        lambda: MtpDeviceSummary(("documents",), 1, 1, 10),
+    )
+    monkeypatch.setattr(secrets, "_windows_credential_backend", lambda: object())
+    monkeypatch.setattr(
+        secrets, "_get_password", lambda _backend, _username: "synthetic-private-value"
+    )
+    monkeypatch.setattr(
+        ApplicationServices,
+        "_hardcover_token_available",
+        lambda _: secrets.hardcover_token_is_stored(),
+    )
+
+    cli.main(["doctor"])
+    captured = capsys.readouterr()
+    result = json.loads(captured.out)
+    credentials = result["checks"]["credentials"]
+    assert credentials["restic_password_stored"] is True
+    assert credentials["hardcover_token_stored"] is True
+    assert "synthetic-private-value" not in captured.out + captured.err
