@@ -58,6 +58,8 @@ See [the release guide](docs/en/releasing.md) for versioning and packaging detai
 
 ## Pull requests
 
+- Changes to `main` go through a pull request with the required checks passing and review conversations resolved. Keep your branch up to date; merges use squash.
+- The default code owner is listed in [CODEOWNERS](.github/CODEOWNERS). Owner approval is not currently required, but changes involving credentials, backups, Calibre, or device writes deserve careful review.
 - Dependabot proposes weekly updates for GitHub Actions, the desktop npm package, and Python's uv lockfile. Each proposal goes through the same checks and review as other changes; updates are not merged automatically.
 - Keep each change focused and explain the user-visible behavior, design choice, and any limitation.
 - Add or update tests for behavior changes, using synthetic data.
