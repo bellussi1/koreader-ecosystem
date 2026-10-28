@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 from koreader_ecosystem.application_state import ApplicationState
+from koreader_ecosystem.backup import BackupError, _copy_application_state
 from koreader_ecosystem.config import AppConfig, load_config, save_config
 from koreader_ecosystem.profile_recovery import (
     ProfileRecoveryError,
@@ -104,6 +105,34 @@ def test_recovery_preserves_saved_automation_preferences(tmp_path: Path) -> None
     assert reopened.daily_backup_enabled is True
     assert reopened.daily_backup_time == "07:30"
     assert reopened.backup_on_kindle_connect is True
+
+
+def test_saved_configuration_is_accepted_by_backup_and_recovery(tmp_path: Path) -> None:
+    source = _restored_profile(tmp_path / "restore")
+    profile = source / "tree" / "application-state"
+    config_path = profile / "config.json"
+    config = AppConfig(
+        calibre_library=tmp_path / "Calibre",
+        restic_repository=tmp_path / "Restic",
+        state_root=profile,
+        daily_backup_enabled=True,
+        daily_backup_time="07:30",
+        backup_on_kindle_connect=True,
+    )
+    save_config(config, config_path)
+    staged = tmp_path / "staged"
+    staged.mkdir()
+    assert _copy_application_state(profile, staged)
+    assert (staged / "config.json").read_bytes() == config_path.read_bytes()
+    assert preview_profile_recovery(source).configured_calibre
+
+    raw = json.loads(config_path.read_text(encoding="utf-8"))
+    for key in ("unknown_setting", "secret_token"):
+        config_path.write_text(json.dumps({**raw, key: "synthetic"}), encoding="utf-8")
+        with pytest.raises(BackupError, match="unsupported settings"):
+            _copy_application_state(profile, staged)
+        with pytest.raises(ProfileRecoveryError, match="profile_recovery_config_invalid"):
+            preview_profile_recovery(source)
 
 
 @pytest.mark.parametrize(
