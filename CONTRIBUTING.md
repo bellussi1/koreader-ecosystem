@@ -58,6 +58,7 @@ See [the release guide](docs/en/releasing.md) for versioning and packaging detai
 
 ## Pull requests
 
+- Dependabot proposes weekly updates for GitHub Actions, the desktop npm package, and Python's uv lockfile. Each proposal goes through the same checks and review as other changes; updates are not merged automatically.
 - Keep each change focused and explain the user-visible behavior, design choice, and any limitation.
 - Add or update tests for behavior changes, using synthetic data.
 - Update the English and Brazilian Portuguese documentation together when changing supported workflows or user-facing behavior.
