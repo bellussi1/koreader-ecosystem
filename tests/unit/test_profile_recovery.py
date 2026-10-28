@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from koreader_ecosystem.application_state import ApplicationState
-from koreader_ecosystem.config import AppConfig, load_config
+from koreader_ecosystem.config import AppConfig, load_config, save_config
 from koreader_ecosystem.profile_recovery import (
     ProfileRecoveryError,
     apply_profile_recovery,
@@ -79,6 +79,52 @@ def test_preview_reads_verified_profile_and_redacts_config_paths(tmp_path: Path)
     assert (
         source / "tree" / "application-state" / "application-state.sqlite3"
     ).read_bytes() == source_database
+
+
+def test_recovery_preserves_saved_automation_preferences(tmp_path: Path) -> None:
+    source = _restored_profile(tmp_path / "restore")
+    config_path = source / "tree" / "application-state" / "config.json"
+    save_config(
+        AppConfig(
+            calibre_library=tmp_path / "Calibre",
+            restic_repository=tmp_path / "Restic",
+            state_root=tmp_path / "old-state",
+            daily_backup_enabled=True,
+            daily_backup_time="07:30",
+            backup_on_kindle_connect=True,
+        ),
+        config_path,
+    )
+    preview = preview_profile_recovery(source)
+    active = tmp_path / "active-state"
+    apply_profile_recovery(
+        source, active, preview.source_fingerprint, active_config=_config(tmp_path), confirmed=True
+    )
+    reopened = load_config(active / "config.json")
+    assert reopened.daily_backup_enabled is True
+    assert reopened.daily_backup_time == "07:30"
+    assert reopened.backup_on_kindle_connect is True
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    [
+        ("daily_backup_enabled", "true"),
+        ("daily_backup_time", "25:00"),
+        ("backup_on_kindle_connect", 1),
+        ("secret_token", "synthetic"),
+    ],
+)
+def test_recovery_rejects_invalid_or_secret_settings(
+    tmp_path: Path, key: str, value: object
+) -> None:
+    source = _restored_profile(tmp_path / "restore")
+    config_path = source / "tree" / "application-state" / "config.json"
+    raw = json.loads(config_path.read_text(encoding="utf-8"))
+    raw[key] = value
+    config_path.write_text(json.dumps(raw), encoding="utf-8")
+    with pytest.raises(ProfileRecoveryError, match="profile_recovery_config_invalid"):
+        preview_profile_recovery(source)
 
 
 def test_preview_rejects_unmarked_or_ambiguous_restore(tmp_path: Path) -> None:
