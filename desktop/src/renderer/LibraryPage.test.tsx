@@ -33,6 +33,31 @@ function book(bookId: number, title: string, authors: string[]): CalibreBook {
   };
 }
 
+function expectCoverPlaceholderToFit(number: string, layout: "cards" | "shelf") {
+  const numberLabel = screen.getByText(number);
+  const placeholder = numberLabel.closest<HTMLDivElement>(".book-card-cover-placeholder");
+  const card = placeholder?.closest(".catalog-book-card");
+
+  expect(placeholder).toBeTruthy();
+  expect(card).toBeTruthy();
+  expect(numberLabel.parentElement).toBe(placeholder);
+  expect(placeholder?.parentElement).toBe(card);
+  expect(window.getComputedStyle(card!).minWidth).toBe("0px");
+  expect(window.getComputedStyle(placeholder!).minWidth).toBe("0px");
+
+  const appCss = Array.from(document.styleSheets)
+    .map((styleSheet) => styleSheet.ownerNode?.textContent ?? "")
+    .join("\n");
+  if (layout === "shelf") {
+    expect(appCss).toMatch(/\.catalog-book-card-shelf \.book-card-cover \{ width: min\(100%, 142px\); height: auto; aspect-ratio: 2 \/ 3;/);
+    expect(window.getComputedStyle(placeholder!).aspectRatio).toBe("2 / 3");
+  } else {
+    expect(appCss).toMatch(/\.catalog-book-card \.book-card-cover \{ width: min\(100%, 140px\); height: 184px;/);
+  }
+  expect(window.getComputedStyle(placeholder!).height).toBe(layout === "shelf" ? "auto" : "184px");
+  expect(window.getComputedStyle(numberLabel).fontSize).toBe("10px");
+}
+
 describe("LibraryPage", () => {
   it("localizes the main library controls in English", () => {
     render(<LibraryPage language="en" books={[]} status="ready" />);
@@ -328,6 +353,8 @@ describe("LibraryPage", () => {
     // Placeholder with BookOpen icon and number instead of cover image
     expect(screen.getByText("001")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
+    expect(screen.getByRole("listitem", { name: "No Cover Book" })).toBeTruthy();
+    expectCoverPlaceholderToFit("001", "cards");
   });
 
   it("shows cover placeholder when cover image fails to load", () => {
@@ -356,7 +383,7 @@ describe("LibraryPage", () => {
     // After error, placeholder is shown
     expect(screen.getByText("002")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
-
+    expectCoverPlaceholderToFit("002", "cards");
   });
 
   it("shows cover placeholder for missing cover in Portuguese", () => {
@@ -371,7 +398,7 @@ describe("LibraryPage", () => {
     expect(screen.getByText("003")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
     expect(screen.getByRole("searchbox", { name: "Buscar nesta estante" })).toBeTruthy();
-
+    expectCoverPlaceholderToFit("003", "cards");
   });
 
   it("shows cover placeholder when a book has no cover in shelf layout", () => {
@@ -389,7 +416,7 @@ describe("LibraryPage", () => {
     // Placeholder with BookOpen icon and number instead of cover image
     expect(screen.getByText("001")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
-
+    expectCoverPlaceholderToFit("001", "shelf");
   });
 
   it("shows cover placeholder when cover image fails to load in shelf layout", () => {
@@ -421,7 +448,6 @@ describe("LibraryPage", () => {
     // After error, placeholder is shown
     expect(screen.getByText("002")).toBeTruthy();
     expect(screen.queryByRole("img")).toBeNull();
-
+    expectCoverPlaceholderToFit("002", "shelf");
   });
 });
-
