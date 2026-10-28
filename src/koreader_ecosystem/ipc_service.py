@@ -300,7 +300,10 @@ def build_dispatcher(
 ) -> Dispatcher:
     """Build the narrowly allowlisted operation dispatcher for the desktop shell."""
 
+    automation_services: ApplicationServices | None = None
+
     def dispatch(operation: str, payload: dict[str, object]) -> object:
+        nonlocal automation_services
         allowed = {
             "system.status",
             "calibre.list",
@@ -1106,7 +1109,12 @@ def build_dispatcher(
             }
 
         if operation.startswith("backup."):
-            services = services_factory(config)
+            if operation.startswith("backup.automation."):
+                if automation_services is None or automation_services.config != config:
+                    automation_services = services_factory(config)
+                services = automation_services
+            else:
+                services = services_factory(config)
             try:
                 if operation == "backup.automation.status":
                     return services.backup_automation_status()

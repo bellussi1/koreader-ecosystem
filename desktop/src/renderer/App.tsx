@@ -1616,7 +1616,7 @@ function SettingsPage({
         </div>
         {backupAutomation?.daily_backup_needs_reactivation ? (
           <div role="alert">
-            <p>{tx("Não foi possível ativar o backup diário. Confira a senha do Restic e tente reativar a tarefa.")}</p>
+            <p>{tx("Não foi possível ativar o backup diário. Confira a senha do Restic e o Windows Task Scheduler e tente reativar a tarefa.")}</p>
             <button type="button" disabled={automationSaving} onClick={() => void saveAutomation({ daily_backup_enabled: true })}>
               {tx("Reativar backup diário")}
             </button>

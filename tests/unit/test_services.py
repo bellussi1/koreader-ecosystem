@@ -1666,3 +1666,31 @@ def test_daily_backup_reactivation_failure_is_visible_and_retryable(
     )
     assert status["daily_backup_needs_reactivation"] is False
     assert calls == ["20:00", "20:00"]
+
+
+def test_automation_status_requests_do_not_reregister_daily_task(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import koreader_ecosystem.services as services
+    from koreader_ecosystem.ipc_service import build_dispatcher
+
+    calls: list[str] = []
+
+    class Scheduler:
+        def __init__(self, *, executable: Path) -> None:
+            pass
+
+        def register_daily_backup(self, start_time: str) -> None:
+            calls.append(start_time)
+
+    monkeypatch.setattr(services, "TaskScheduler", Scheduler)
+    monkeypatch.setattr(services, "restic_password_is_stored", lambda: True)
+    monkeypatch.setenv("KOREADER_ECOSYSTEM_SCHEDULER_EXECUTABLE", "C:/Apps/KOReaderEcosystem.exe")
+    config = replace(_config(tmp_path), daily_backup_enabled=True)
+    dispatch = build_dispatcher(
+        config_loader=lambda: config,
+        services_factory=lambda current: ApplicationServices(current, restic=FakeRestic()),
+    )
+    dispatch("backup.automation.status", {})
+    dispatch("backup.automation.status", {})
+    assert calls == ["20:00"]

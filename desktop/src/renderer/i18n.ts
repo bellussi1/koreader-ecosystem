@@ -411,7 +411,7 @@ const englishText: Record<string, string> = {
   "OPCIONAL · DESLIGADO POR PADRÃO": "OPTIONAL · OFF BY DEFAULT",
   "Configure quando a aplicação cria snapshots locais criptografados.": "Choose when the app creates encrypted local snapshots.",
   "Backup diário": "Daily backup",
-  "Não foi possível ativar o backup diário. Confira a senha do Restic e tente reativar a tarefa.": "Could not activate daily backup. Check your Restic password and try reactivating the task.",
+  "Não foi possível ativar o backup diário. Confira a senha do Restic e o Windows Task Scheduler e tente reativar a tarefa.": "Could not activate daily backup. Check your Restic password and Windows Task Scheduler, then try reactivating the task.",
   "Reativar backup diário": "Reactivate daily backup",
   "Agenda Calibre e dados do app no Windows Task Scheduler.": "Schedules Calibre and app data with Windows Task Scheduler.",
   "Executar às": "Run at",
