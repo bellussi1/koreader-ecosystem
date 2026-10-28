@@ -6,6 +6,7 @@ describe("reading API", () => {
     const timestamp = "2026-10-26T20:00:00Z";
     const status = {
       daily_backup_enabled: false,
+      daily_backup_needs_reactivation: false,
       daily_backup_time: "20:00",
       backup_on_kindle_connect: false,
       last_backup: {
@@ -40,6 +41,10 @@ describe("reading API", () => {
       invoke: vi.fn(async () => ({ ...status, daily_backup_time: "25:70" })),
     });
     await expect(invalidApi.backup.automationStatus()).rejects.toThrow("invalid_response");
+    const reactivationApi = createReadingApi({
+      invoke: vi.fn(async () => ({ ...status, daily_backup_enabled: true, daily_backup_needs_reactivation: true })),
+    });
+    expect((await reactivationApi.backup.automationStatus()).daily_backup_needs_reactivation).toBe(true);
   });
 
   it("preserves Hardcover cache provenance and synchronization reconciliation counts", async () => {
