@@ -69,6 +69,25 @@ Consulte o [guia de release](docs/releasing.md) para detalhes de versão e empac
 - Informe quais verificações foram executadas e diferencie verificações automatizadas da validação em dispositivo físico.
 - Não misture instaladores gerados, dados de usuários ou limpezas não relacionadas à alteração de código.
 
+## Fluxo de revisão e merge
+
+1. **Antes de começar:** Confira issues e PRs existentes. Para mudanças substanciais, discuta o comportamento e a abordagem em uma issue antes de implementar. Correções pequenas podem ser propostas diretamente.
+2. **Abra um PR focado:** Vincule a issue quando houver, explique o problema e o comportamento, descreva riscos e limitações e registre as verificações realmente executadas. Use rascunho enquanto a mudança não estiver pronta para revisão. Não publique segredos ou dados pessoais de leitura.
+3. **Revise a mudança:** Uma pessoa mantenedora examina o diff atual e as discussões, confirma as verificações da revisão atual e procura regressões e lacunas na documentação. Mudanças em credenciais, backup ou restauração, gravações no Calibre ou dispositivo, releases e permissões de CI exigem atenção especial a falhas e recuperação. Revisão automatizada ajuda, mas não substitui a decisão humana.
+4. **Trate os comentários:** Responda na própria conversa com a correção e o commit, uma justificativa ou uma pergunta. A pessoa autora não deve resolver uma conversa apenas para esconder uma divergência; quem revisou ou mantém o projeto confirma que a preocupação foi tratada. Revise novamente mudanças relevantes e confira a revisão mais recente antes de aprovar.
+5. **Faça o merge:** Uma pessoa mantenedora verifica o sucesso do CI exigido, a resolução dos comentários relevantes e o registro honesto de testes manuais ou em dispositivo físico. Integre mudanças focadas com squash e confira se as issues vinculadas só foram fechadas quando seus critérios de aceite estiverem atendidos.
+
+### Como escrever bons comentários de revisão
+
+- Descreva o problema concreto, quando ocorre e sua consequência; indique o menor trecho relevante e sugira uma direção quando útil.
+- Diferencie problemas bloqueantes de correção, segurança ou perda de dados de sugestões e perguntas não bloqueantes. Seja respeitoso, discuta o código e evite exigências especulativas ou puramente de estilo.
+- Não inclua credenciais, detalhes de vulnerabilidades privadas, conteúdo de bibliotecas pessoais ou logs sem edição. Use o [canal privado de vulnerabilidades](SECURITY.pt-BR.md) para relatos de segurança.
+- A pessoa autora pode discordar: explique os trade-offs e peça esclarecimentos. A manutenção decide se a preocupação foi resolvida; não aceite comentários automatizados sem avaliação.
+
+### Projetos com pouca gente na manutenção
+
+Uma revisão humana independente é preferível, principalmente em mudanças sensíveis. O projeto tem atualmente uma pessoa responsável padrão pelo código e não exige sua aprovação; uma pessoa mantenedora não pode aprovar o próprio PR como revisão independente. Sem outra pessoa disponível, a manutenção registra a revisão e as verificações no PR e segue as proteções e checks existentes. Isso não equivale a uma revisão independente. Quando a equipe crescer, reavalie exigir aprovação humana separada, em vez de criar agora uma regra impossível de cumprir.
+
 ## Política de idioma da documentação
 
 O `README.md` na raiz é a entrada em inglês. A entrada em português do Brasil é `README.pt-BR.md`; os guias ativos de uso e desenvolvimento existem em `docs/en/` e `docs/`, respectivamente. Mantenha os links de idioma perto do topo e atualize as duas cópias na mesma alteração. Planos históricos de implementação e registros operacionais específicos do proprietário não são guias oficiais para contribuidores e não são traduzidos automaticamente; revise-os quanto à privacidade antes de publicá-los.
