@@ -159,7 +159,7 @@ O executável Electron empacota a interface React e um sidecar Python. O código
 ### Requisitos de desenvolvimento
 
 - Windows x64
-- Node.js 24 ou posterior e npm
+- Node.js 24.15 ou posterior da série 24.x, ou 26 ou posterior e npm
 - Python 3.14 e `uv`
 - PowerShell 7
 - Git

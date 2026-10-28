@@ -17,7 +17,7 @@ Obrigado pelo interesse no KOReader Ecosystem. O código original do projeto est
 
 ## Ambiente de desenvolvimento
 
-O alvo desktop suportado é Windows x64. Instale Git, PowerShell 7, Node.js 24 ou posterior com npm e Python 3.14 com `uv`.
+O alvo desktop suportado é Windows x64. Instale Git, PowerShell 7, Node.js 24.15 ou posterior da série 24.x, ou 26 ou posterior com npm e Python 3.14 com `uv`.
 
 Na raiz do repositório:
 
