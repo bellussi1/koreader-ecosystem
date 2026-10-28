@@ -113,9 +113,10 @@ describe("guided profile recovery", () => {
         list: vi.fn().mockResolvedValue([]),
         create: vi.fn(),
         automationStatus: vi.fn().mockResolvedValue({
-          daily_backup_enabled: false,
-          daily_backup_time: "20:00",
-          backup_on_kindle_connect: false,
+          daily_backup_enabled: true,
+          daily_backup_time: "06:30",
+          backup_on_kindle_connect: true,
+          daily_backup_needs_reactivation: true,
           last_backup: null,
         }),
         configureAutomation: vi.fn().mockImplementation(async (preferences) => ({
@@ -157,27 +158,14 @@ describe("guided profile recovery", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Configuração" }));
     expect(await screen.findByRole("heading", { name: "Automação local" })).toBeTruthy();
-    expect(screen.getByRole("checkbox", { name: "Backup diário" })).toHaveProperty("checked", false);
-    vi.mocked(reading.backup.configureAutomation).mockResolvedValueOnce({
-      daily_backup_enabled: true,
-      daily_backup_time: "20:00",
-      backup_on_kindle_connect: false,
-      daily_backup_needs_reactivation: true,
-      last_backup: null,
-    });
-    fireEvent.click(screen.getByRole("checkbox", { name: "Backup diário" }));
-    await waitFor(() => expect(reading.backup.configureAutomation).toHaveBeenCalledWith({
-      daily_backup_enabled: true,
-      daily_backup_time: "20:00",
-      backup_on_kindle_connect: false,
-    }));
+    expect(screen.getByRole("checkbox", { name: "Backup diário" })).toHaveProperty("checked", true);
     expect((await screen.findByRole("alert")).textContent).toContain("Windows Task Scheduler");
     fireEvent.click(screen.getByRole("button", { name: "Reativar backup diário" }));
-    await waitFor(() => expect(reading.backup.configureAutomation).toHaveBeenCalledTimes(2));
+    await waitFor(() => expect(reading.backup.configureAutomation).toHaveBeenCalledTimes(1));
     expect(reading.backup.configureAutomation).toHaveBeenLastCalledWith({
       daily_backup_enabled: true,
-      daily_backup_time: "20:00",
-      backup_on_kindle_connect: false,
+      daily_backup_time: "06:30",
+      backup_on_kindle_connect: true,
     });
     fireEvent.change(screen.getByLabelText("Idioma da interface"), { target: { value: "en" } });
     expect(window.localStorage.getItem("kre.ui-language")).toBe("en");
