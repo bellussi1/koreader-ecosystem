@@ -58,6 +58,8 @@ Consulte o [guia de release](docs/releasing.md) para detalhes de versão e empac
 
 ## Pull requests
 
+- Alterações na `main` passam por pull request com as verificações obrigatórias aprovadas e conversas de revisão resolvidas. Mantenha sua branch atualizada; os merges usam squash.
+- O responsável padrão pelo código está em [CODEOWNERS](.github/CODEOWNERS). A aprovação do responsável não é obrigatória atualmente, mas mudanças em credenciais, backups, Calibre ou gravações no dispositivo exigem revisão cuidadosa.
 - O Dependabot propõe atualizações semanais para GitHub Actions, dependências npm do aplicativo e o arquivo de bloqueio uv do Python. Cada proposta passa pelas mesmas verificações e revisão das demais alterações; não há merge automático.
 - Mantenha cada alteração focada e explique o comportamento visível ao usuário, a decisão de projeto e as limitações.
 - Inclua ou atualize testes para mudanças de comportamento, usando dados sintéticos.
