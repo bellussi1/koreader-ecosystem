@@ -291,6 +291,8 @@ class ApplicationServices:
         hardcover: HardcoverClient | None = None,
     ) -> None:
         self.config = config
+        self._daily_task_checked = False
+        self._daily_task_needs_reactivation = False
         self.restic: ResticOperations = restic or ResticClient(config.restic_repository)
         self.hardcover = hardcover or HardcoverClient()
         self.application_state_database = self._application_state_database()
@@ -906,6 +908,18 @@ class ApplicationServices:
             self._remove_stage_result(stage_path, device_stage)
 
     def backup_automation_status(self) -> dict[str, object]:
+        if self.config.daily_backup_enabled and not self._daily_task_checked:
+            self._daily_task_checked = True
+            try:
+                executable = os.environ.get("KOREADER_ECOSYSTEM_SCHEDULER_EXECUTABLE")
+                if not executable or not restic_password_is_stored():
+                    raise AutomationError("scheduled_task_unavailable")
+                TaskScheduler(executable=Path(executable)).register_daily_backup(
+                    self.config.daily_backup_time
+                )
+                self._daily_task_needs_reactivation = False
+            except AutomationError, SecretStoreError:
+                self._daily_task_needs_reactivation = True
         settings = BackupAutomationSettings(
             daily_backup_enabled=self.config.daily_backup_enabled,
             daily_backup_time=self.config.daily_backup_time,
@@ -920,7 +934,11 @@ class ApplicationServices:
                 "last_success_at": record.last_success_at,
                 "reason_code": record.reason_code,
             }
-        return {**settings.to_dict(), "last_backup": last_backup}
+        return {
+            **settings.to_dict(),
+            "last_backup": last_backup,
+            "daily_backup_needs_reactivation": self._daily_task_needs_reactivation,
+        }
 
     def configure_backup_automation(
         self,
@@ -950,6 +968,8 @@ class ApplicationServices:
         needs_task_update = (settings.daily_backup_enabled or previous.daily_backup_enabled) and (
             settings.daily_backup_enabled != previous.daily_backup_enabled
             or settings.daily_backup_time != previous.daily_backup_time
+            or self._daily_task_needs_reactivation
+            or (settings.daily_backup_enabled and not self._daily_task_checked)
         )
         task_scheduler: TaskScheduler | None = None
         if needs_task_update:
@@ -984,6 +1004,8 @@ class ApplicationServices:
                     pass
             raise ServiceError("configuration_unavailable") from None
         self.config = updated
+        self._daily_task_checked = True
+        self._daily_task_needs_reactivation = False
         return self.backup_automation_status()
 
     def run_scheduled_backup(self) -> BackupResult:

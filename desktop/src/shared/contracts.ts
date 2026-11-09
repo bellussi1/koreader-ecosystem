@@ -308,6 +308,7 @@ export interface BackupCredentialStatus {
 
 export interface BackupAutomationStatus {
   daily_backup_enabled: boolean;
+  daily_backup_needs_reactivation?: boolean;
   daily_backup_time: string;
   backup_on_kindle_connect: boolean;
   last_backup: {
@@ -1096,6 +1097,7 @@ function asBackupAutomationStatus(value: unknown): BackupAutomationStatus {
     typeof value.daily_backup_time !== "string" ||
     !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value.daily_backup_time) ||
     typeof value.backup_on_kindle_connect !== "boolean"
+    || (value.daily_backup_needs_reactivation !== undefined && typeof value.daily_backup_needs_reactivation !== "boolean")
   ) {
     throw invalidResponse();
   }
@@ -1125,6 +1127,7 @@ function asBackupAutomationStatus(value: unknown): BackupAutomationStatus {
 
   return {
     daily_backup_enabled: value.daily_backup_enabled,
+    daily_backup_needs_reactivation: value.daily_backup_needs_reactivation === true,
     daily_backup_time: value.daily_backup_time,
     backup_on_kindle_connect: value.backup_on_kindle_connect,
     last_backup: lastBackup,
