@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from koreader_ecosystem.application_state import ApplicationState, ApplicationStateError
+from koreader_ecosystem.backup_automation import AutomationError, BackupAutomationSettings
 from koreader_ecosystem.config import (
     AppConfig,
     ConfigError,
@@ -65,6 +66,9 @@ _CONFIG_KEYS = frozenset(
         "restic_remote_repository",
         "restic_remote_region",
         "state_root",
+        "daily_backup_enabled",
+        "daily_backup_time",
+        "backup_on_kindle_connect",
     }
 )
 _ROW_TABLES = (
@@ -361,13 +365,18 @@ def _read_config(path: Path) -> dict[str, Any]:
     ):
         raise ProfileRecoveryError("profile_recovery_config_invalid")
     try:
+        BackupAutomationSettings(
+            daily_backup_enabled=raw.get("daily_backup_enabled", False),
+            daily_backup_time=raw.get("daily_backup_time", "20:00"),
+            backup_on_kindle_connect=raw.get("backup_on_kindle_connect", False),
+        )
         if raw.get("restic_remote_repository") is None:
             if raw.get("restic_remote_region") is not None:
                 raise ConfigError("remote region without repository")
         else:
             validate_s3_repository(raw["restic_remote_repository"])
             validate_s3_region(raw.get("restic_remote_region", "auto"))
-    except ConfigError:
+    except ConfigError, AutomationError:
         raise ProfileRecoveryError("profile_recovery_config_invalid") from None
     return raw
 
@@ -441,6 +450,9 @@ def _recovered_config(
             state_root=active_root,
             restic_remote_repository=remote_repository,
             restic_remote_region=remote_region,
+            daily_backup_enabled=raw.get("daily_backup_enabled", False),
+            daily_backup_time=raw.get("daily_backup_time", "20:00"),
+            backup_on_kindle_connect=raw.get("backup_on_kindle_connect", False),
         )
     except ConfigError, OSError, TypeError:
         raise ProfileRecoveryError("profile_recovery_config_invalid") from None
