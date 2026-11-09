@@ -411,6 +411,8 @@ const englishText: Record<string, string> = {
   "OPCIONAL · DESLIGADO POR PADRÃO": "OPTIONAL · OFF BY DEFAULT",
   "Configure quando a aplicação cria snapshots locais criptografados.": "Choose when the app creates encrypted local snapshots.",
   "Backup diário": "Daily backup",
+  "Não foi possível ativar o backup diário. Confira a senha do Restic e o Windows Task Scheduler e tente reativar a tarefa.": "Could not activate daily backup. Check your Restic password and Windows Task Scheduler, then try reactivating the task.",
+  "Reativar backup diário": "Reactivate daily backup",
   "Agenda Calibre e dados do app no Windows Task Scheduler.": "Schedules Calibre and app data with Windows Task Scheduler.",
   "Executar às": "Run at",
   "Horário do backup diário": "Daily backup time",
@@ -656,8 +658,17 @@ const englishText: Record<string, string> = {
   "dados locais do app": "local app data",
   "nenhum registro local encontrado": "no local records found",
   "Os metadados bibliográficos ficam no Calibre e as estantes de leitura ficam no Hardcover. Conectar uma conta não altera livros nem status da estante.": "Bibliographic metadata stays in Calibre, while reading shelves stay in Hardcover. Connecting an account does not change books or shelf statuses.",
+  "Mapeamento de colunas do CSV": "CSV column mapping",
+  "Offline": "Offline",
+  "Aviso nos dados de leitura": "Reading data notice",
+  "Falhas temporárias são tentadas novamente automaticamente. Se persistir, confira a chave e a conexão; o Calibre continua disponível.": "Temporary failures are retried automatically. If the problem persists, check the key and the connection; Calibre remains available.",
+  "Não foi possível concluir a operação de backup.": "Could not complete the backup operation.",
 };
 
 export function localizeText(language: UiLanguage, text: string): string {
   return language === "en" ? englishText[text] ?? text : text;
+}
+
+export function hasEnglishTranslation(text: string): boolean {
+  return Object.prototype.hasOwnProperty.call(englishText, text);
 }
