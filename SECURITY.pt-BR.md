@@ -10,6 +10,10 @@ Use o [relato privado de vulnerabilidades do GitHub](https://github.com/bellussi
 
 Inclua uma descrição breve do componente afetado, impacto, versão ou commit afetado, uma reprodução usando dados sintéticos e possíveis formas de mitigação. Não envie uma prova de conceito que acesse dados de outra pessoa ou cause danos.
 
+## Tratamento dos relatos
+
+A manutenção deve reconhecer e avaliar os relatos em particular, verificar versões afetadas e impacto e coordenar a correção e divulgação com quem relatou, quando possível. Mantenha detalhes e reproduções privados até haver correção ou mitigação e a divulgação estar coordenada. Se houver credenciais expostas, revogue-as ou faça sua rotação prontamente. Após a correção, publique um aviso com versões afetadas, medidas de remediação e limitações remanescentes quando apropriado. Os prazos dependem da disponibilidade da manutenção e não são garantidos.
+
 ## Não inclua
 
 Nunca envie conteúdo real da biblioteca, ebooks, bancos Calibre, sidecars `.sdr` do KOReader, snapshots de backup, exportações pessoais, tokens de acesso, chaves de API, senhas ou logs e capturas de tela com dados pessoais. Oculte caminhos locais, identificadores de conta ou dispositivo e informações sobre livros. Revogue qualquer credencial que tenha sido exposta.

@@ -69,6 +69,25 @@ See [the release guide](docs/en/releasing.md) for versioning and packaging detai
 - State which checks ran and distinguish automated checks from physical-device validation.
 - Do not bundle generated installers, user data, or unrelated cleanup into a source change.
 
+## Review and merge workflow
+
+1. **Before starting:** Check existing issues and pull requests. For a substantial change, discuss the intended behavior and approach in an issue before investing in implementation. Small corrections can be proposed directly.
+2. **Open a focused PR:** Link the issue when applicable, explain the problem and behavior, describe risks and limitations, and record the checks actually run. Use a draft while the change is not ready for review. Never paste secrets or personal reading data.
+3. **Review the change:** A maintainer checks the current diff and relevant discussion, confirms the checks for the current revision, and looks for regressions and documentation gaps. Changes involving credentials, backup or restore, Calibre or device writes, releases, and CI permissions need particular attention to failure and recovery paths. Automated review is useful feedback, not a substitute for a human decision.
+4. **Address feedback:** Respond in the relevant thread with the fix and commit, a reasoned explanation, or a question. The author should not resolve a thread simply to hide an unresolved disagreement; the reviewer or maintainer confirms the concern is addressed. Re-review material changes and check the latest revision before approval.
+5. **Merge:** A maintainer checks that required CI passed, relevant feedback is resolved, and any physical-device or manual validation is honestly recorded. Merge focused changes using squash, then confirm linked issues are closed only when their acceptance criteria are met.
+
+### Writing useful review comments
+
+- Explain the concrete problem, trigger, and consequence; point to the smallest relevant code range and suggest a direction when useful.
+- Distinguish a blocking correctness, security, or data-loss issue from a non-blocking suggestion or question. Be respectful, discuss the code rather than the person, and avoid speculative or purely stylistic demands.
+- Never include credentials, private vulnerability details, personal library contents, or unredacted logs. Use [private vulnerability reporting](SECURITY.md) for security reports.
+- Authors may disagree: explain the trade-off and ask for clarification. Maintainers decide whether the concern is resolved; do not blindly accept automated comments.
+
+### Small-maintainer projects
+
+An independent human review is preferred, especially for sensitive changes. The project currently has one default code owner and does not require owner approval; a maintainer cannot approve their own PR as an independent reviewer. When no second reviewer is available, the maintainer documents the review and verification in the PR and uses the existing branch protection and required checks. This is not equivalent to independent review. As maintainership grows, revisit requiring a separate human approval rather than introducing an impossible requirement now.
+
 ## Documentation language policy
 
 The root `README.md` is the English entry point. The Brazilian Portuguese entry point is `README.pt-BR.md`; active user and developer guides are mirrored under `docs/en/` and `docs/` respectively. Keep the language links near the top and update both copies in the same change. Historical implementation plans and owner-specific operational records are not official contributor guides and are not translated automatically; review them for privacy before publishing them.
