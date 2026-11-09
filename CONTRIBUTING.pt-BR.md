@@ -86,7 +86,7 @@ Consulte o [guia de release](docs/releasing.md) para detalhes de versão e empac
 
 ### Projetos com pouca gente na manutenção
 
-Uma revisão humana independente é preferível, principalmente em mudanças sensíveis. O projeto tem atualmente uma pessoa responsável padrão pelo código e não exige sua aprovação; uma pessoa mantenedora não pode aprovar o próprio PR como revisão independente. Sem outra pessoa disponível, a manutenção registra a revisão e as verificações no PR e segue as proteções e checks existentes. Isso não equivale a uma revisão independente. Quando a equipe crescer, reavalie exigir aprovação humana separada, em vez de criar agora uma regra impossível de cumprir.
+Uma revisão humana independente é preferível, principalmente em mudanças sensíveis. O projeto tem atualmente uma pessoa responsável padrão pelo código, mas a aprovação dessa pessoa não é obrigatória; uma pessoa mantenedora não pode aprovar o próprio PR como revisão independente. Sem outra pessoa disponível, a manutenção registra a revisão e as verificações no PR e segue as proteções e checks existentes. Isso não equivale a uma revisão independente. Quando a equipe crescer, reavalie exigir aprovação humana separada, em vez de criar agora uma regra impossível de cumprir.
 
 ## Política de idioma da documentação
 
