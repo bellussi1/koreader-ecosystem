@@ -5,5 +5,6 @@ export default defineConfig({
     environment: "node",
     css: true,
     include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    exclude: ["src/renderer/**/*.browser.test.tsx"],
   },
 });
