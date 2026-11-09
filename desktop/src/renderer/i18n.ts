@@ -656,8 +656,14 @@ const englishText: Record<string, string> = {
   "dados locais do app": "local app data",
   "nenhum registro local encontrado": "no local records found",
   "Os metadados bibliográficos ficam no Calibre e as estantes de leitura ficam no Hardcover. Conectar uma conta não altera livros nem status da estante.": "Bibliographic metadata stays in Calibre, while reading shelves stay in Hardcover. Connecting an account does not change books or shelf statuses.",
+  "Mapeamento de colunas do CSV": "CSV column mapping",
+  "Offline": "Offline",
 };
 
 export function localizeText(language: UiLanguage, text: string): string {
   return language === "en" ? englishText[text] ?? text : text;
+}
+
+export function hasEnglishTranslation(text: string): boolean {
+  return Object.prototype.hasOwnProperty.call(englishText, text);
 }
