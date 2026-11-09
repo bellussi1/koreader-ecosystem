@@ -660,6 +660,9 @@ const englishText: Record<string, string> = {
   "Os metadados bibliográficos ficam no Calibre e as estantes de leitura ficam no Hardcover. Conectar uma conta não altera livros nem status da estante.": "Bibliographic metadata stays in Calibre, while reading shelves stay in Hardcover. Connecting an account does not change books or shelf statuses.",
   "Mapeamento de colunas do CSV": "CSV column mapping",
   "Offline": "Offline",
+  "Aviso nos dados de leitura": "Reading data notice",
+  "Falhas temporárias são tentadas novamente automaticamente. Se persistir, confira a chave e a conexão; o Calibre continua disponível.": "Temporary failures are retried automatically. If the problem persists, check the key and the connection; Calibre remains available.",
+  "Não foi possível concluir a operação de backup.": "Could not complete the backup operation.",
 };
 
 export function localizeText(language: UiLanguage, text: string): string {

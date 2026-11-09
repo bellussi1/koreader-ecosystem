@@ -6,31 +6,87 @@ import { hasEnglishTranslation } from "./i18n";
 
 const rendererDirectory = path.dirname(fileURLToPath(import.meta.url));
 
+function collectCallLiterals(source: string, openIndex: number): string[] {
+  const literals: string[] = [];
+  let depth = 0;
+
+  for (let index = openIndex; index < source.length; index++) {
+    const character = source[index];
+
+    if (character === "\"" || character === "'" || character === "`") {
+      const quote = character;
+      const before = source.slice(Math.max(0, index - 8), index);
+      if (/(===|!==|==|!=)\s*$/.test(before)) {
+        index++;
+        while (index < source.length) {
+          if (source[index] === "\\") {
+            index += 2;
+            continue;
+          }
+          if (source[index] === quote) break;
+          index++;
+        }
+        continue;
+      }
+
+      let value = "";
+      let closed = false;
+      for (index++; index < source.length; index++) {
+        const current = source[index];
+        if (current === "\\") {
+          value += source[index + 1] ?? "";
+          index++;
+          continue;
+        }
+        if (current === quote) {
+          closed = true;
+          break;
+        }
+        value += current;
+      }
+      if (closed && (quote !== "`" || !value.includes("${")) && value.trim()) {
+        literals.push(value);
+      }
+      continue;
+    }
+
+    if (character === "(") {
+      depth++;
+    } else if (character === ")") {
+      depth--;
+      if (depth === 0) break;
+    }
+  }
+
+  return literals;
+}
+
 function collectLocalizedLiterals(source: string): string[] {
   const literals = new Set<string>();
-  const patterns = [
-    /\btx\("((?:[^"\\]|\\.)*)"\)/g,
-    /\blocalizeText\(\s*language\s*,\s*"((?:[^"\\]|\\.)*)"\s*\)/g,
-  ];
-  for (const pattern of patterns) {
-    for (const match of source.matchAll(pattern)) {
-      literals.add(match[1].replace(/\\(["\\])/g, "$1"));
+  for (const match of source.matchAll(/\b(?:tx|localizeText)\s*\(/g)) {
+    const openIndex = (match.index ?? 0) + match[0].length - 1;
+    for (const literal of collectCallLiterals(source, openIndex)) {
+      literals.add(literal);
     }
   }
   return [...literals];
 }
 
 describe("English translation coverage", () => {
-  it("collects localized literals from a synthetic source", () => {
+  it("collects single-quoted and conditional literals from a synthetic source", () => {
     const source = [
-      'const label = tx("Título");',
-      'const description = localizeText(language, "Série, publicação e idioma");',
+      "const title = tx('Título');",
+      'const state = tx(status === "ready" ? "Pronto" : "Offline");',
+      'const step = localizeText(language, value === "confirm" ? "Confirmar" : "Voltar");',
       "tx(dynamicValue);",
     ].join("\n");
 
     expect(collectLocalizedLiterals(source)).toEqual([
       "Título",
-      "Série, publicação e idioma",
+      "Pronto",
+      "Offline",
+      "Confirmar",
+      "Voltar",
     ]);
   });
 
